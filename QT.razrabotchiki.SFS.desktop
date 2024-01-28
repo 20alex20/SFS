@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=QT.razrabotchiki.SFS
+Exec=/usr/bin/QT.razrabotchiki.SFS
+Name=SFS
+Name[ru]=SFS
+
+[X-Application]
+Permissions=Internet;RemovableMedia;UserDirs
+OrganizationName=QT.razrabotchiki
+ApplicationName=SFS
+ExecDBus=/usr/bin/QT.razrabotchiki.SFS
