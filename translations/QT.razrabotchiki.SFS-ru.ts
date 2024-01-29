@@ -9,27 +9,27 @@
         <translation>SFS</translation>
     </message>
     <message>
-        <location filename="../qml/cover/DefaultCoverPage.qml" line="40"/>
+        <location filename="../qml/cover/DefaultCoverPage.qml" line="41"/>
         <source>Host:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/cover/DefaultCoverPage.qml" line="40"/>
+        <location filename="../qml/cover/DefaultCoverPage.qml" line="41"/>
         <source>No connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/cover/DefaultCoverPage.qml" line="46"/>
+        <location filename="../qml/cover/DefaultCoverPage.qml" line="47"/>
         <source>255.255.255.255</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/cover/DefaultCoverPage.qml" line="52"/>
+        <location filename="../qml/cover/DefaultCoverPage.qml" line="53"/>
         <source>Port:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/cover/DefaultCoverPage.qml" line="58"/>
+        <location filename="../qml/cover/DefaultCoverPage.qml" line="59"/>
         <source>22</source>
         <translation type="unfinished"></translation>
     </message>

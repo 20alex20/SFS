@@ -36,26 +36,27 @@ CoverBackground {
         anchors.bottomMargin: 20
         spacing: 5
 
+        property bool connected: true
         Text {
-            text: true ? qsTr("Host:") : qsTr("No connection")
+            text: qsTr("Хост:")
             font.bold: true
             font.pixelSize: 30
             color: "#ababab"
         }
         Text {
-            text: true ? qsTr("255.255.255.255") : ""
+            text: parent.connected ? qsTr("255.255.255.255") : "-"
             font.pixelSize: 30
             color: "#ababab"
         }
 
         Text {
-            text: true ? qsTr("Port:") : ""
+            text: qsTr("Порт:")
             font.bold: true
             font.pixelSize: 30
             color: "#ababab"
         }
         Text {
-            text: true ? qsTr("22") : "-"
+            text: parent.connected ? qsTr("22") : "-"
             font.pixelSize: 30
             color: "#ababab"
         }
