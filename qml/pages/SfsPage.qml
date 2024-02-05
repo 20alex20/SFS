@@ -2,62 +2,63 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
+    property bool connectedVirtual: true
+
     objectName: "sfsPage"
     allowedOrientations: Orientation.Portrait
+    backgroundColor: "Black"
 
-    Rectangle {
+    TextArea {
+        id: textArea
         anchors.fill: parent
-        color: "Black"
+        textLeftMargin: 10
+        textRightMargin: 10
+        font.family: "Consolas"
+        font.pixelSize: 30
+        color: "White"
+        backgroundStyle: TextEditor.NoBackground
+        wrapMode: TextEdit.WrapAnywhere
+        inputMethodHints: Qt.ImhNoAutoUppercase
 
-        TextArea {
-            id: textArea
-            anchors.fill: parent
-            textLeftMargin: 10
-            textRightMargin: 10
-            font.family: "Consolas"
-            font.pixelSize: 40
-            color: "White"
-            backgroundStyle: TextEditor.NoBackground
-            wrapMode: TextEdit.WrapAnywhere
-
-            text: "> "
-            property int length: 2
-            property bool blocking: false
-            onCursorPositionChanged:  {
-                if (!blocking) {
-                    var pos = textArea.cursorPosition
-                    if (pos >= length) {
-                        if (readOnly)
-                            readOnly = false
-                    }
-                    else if (length - pos <= 2) {
-                        pos = length
-                        if (readOnly)
-                            readOnly = false
-                    }
-                    else {
-                        if (!readOnly)
-                            readOnly = true
-                    }
+        text: ">"
+        property int length: 1
+        property string startLine: ">"
+        property bool blocking: false
+        onCursorPositionChanged:  {
+            if (!blocking) {
+                blocking = true
+                var pos = textArea.cursorPosition
+                if (pos >= length) {
+                    readOnly = false
                     textArea.cursorPosition = pos
                 }
-            }
-            onTextChanged: {
-                if (text.length < length) {
-                    blocking = true
-                    text += " "
-                    length = text.length
-                    textArea.cursorPosition = length
-                    blocking = false
+                else {
+                    readOnly = true
                 }
-                else if (text[text.length - 1] === '\n') {
-                    blocking = true
-                    text += "> ";
-                    length = text.length;
-                    textArea.cursorPosition = length
-                    blocking = false
-                }
+                blocking = false
             }
         }
+        onTextChanged: {
+            if (text[text.length - 1] === '\n') {
+                blocking = true
+                text += startLine;
+                length = text.length;
+                textArea.cursorPosition = length
+                blocking = false
+            }
+            else if (text.length < length) {
+                blocking = true
+                text += ">"
+                length = text.length
+                textArea.cursorPosition = length
+                blocking = false
+            }
+        }
+    }
+
+    function fix(connectedHost, connectedPort) {
+        textArea.startLine = connectedHost + ":" + connectedPort + ">"
+        textArea.length = textArea.startLine.length
+        textArea.text = textArea.startLine
     }
 }
