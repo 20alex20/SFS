@@ -48,7 +48,6 @@ SOURCES += \
 HEADERS += \
 
 DISTFILES += \
-    qml/icons/SFS.png \
     qml/pages/SfsPage.qml \
     qml/pages/SftpPage.qml \
     rpm/QT.razrabotchiki.SFS.spec \

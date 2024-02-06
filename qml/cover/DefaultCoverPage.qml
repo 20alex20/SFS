@@ -85,6 +85,7 @@ CoverBackground {
         anchors.bottomMargin: (cover.height - column.height - 87.5 - height) / 2 + 87.5
 
         wrapMode: Text.Wrap
+        horizontalAlignment: Text.AlignHCenter
         text: connectedVirtual ? getFirstPage().message : "Неподключено"
         color: "White"
         font.pixelSize: 32

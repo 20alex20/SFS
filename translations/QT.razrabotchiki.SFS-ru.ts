@@ -4,27 +4,19 @@
 <context>
     <name>DefaultCoverPage</name>
     <message>
-        <location filename="../qml/cover/DefaultCoverPage.qml" line="40"/>
+        <location filename="../qml/cover/DefaultCoverPage.qml" line="45"/>
         <source>SFS</source>
         <translation type="unfinished">SFS</translation>
     </message>
     <message>
-        <location filename="../qml/cover/DefaultCoverPage.qml" line="50"/>
+        <location filename="../qml/cover/DefaultCoverPage.qml" line="51"/>
         <source>Host:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/cover/DefaultCoverPage.qml" line="62"/>
+        <location filename="../qml/cover/DefaultCoverPage.qml" line="65"/>
         <source>Port:</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SftpPage</name>
-    <message>
-        <location filename="../qml/pages/SftpPage.qml" line="72"/>
-        <source>SFS</source>
-        <translation type="unfinished">SFS</translation>
     </message>
 </context>
 </TS>
