@@ -25,7 +25,7 @@ CoverBackground {
             onTriggered: if (connectedVirtual) getFirstPage().reconnect()
         }
         CoverAction {
-            iconSource: connectedVirtual && getFirstPage().transfering ? "../icons/buttons/40x40/cancel.png" : "../icons/buttons/40x40/cancel 2.png"
+            iconSource: connectedVirtual && getFirstPage().transfering ? "../icons/buttons/40x40/cancel.png" : "../icons/buttons/40x40/cancel_2.png"
             onTriggered: if (connectedVirtual) getFirstPage().stopTransfer()
         }
     }
