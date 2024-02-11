@@ -10,46 +10,154 @@ Page {
     property string connectedPort: ""
 
     property bool blocking: false
-    property bool connected: true
-    property bool transfering: false
     property string message: "Подключено"
+    property bool transfering: false
+    property var elements: null  // Array
+    property string pathElements: ""
+    property bool remote: false
+    property bool copy: false
+
+    property string path1: ""
+    property int number1: 0
+    property QtObject menuObject1: null
+    property string path2: ""
+    property int number2: 0
+    property QtObject menuObject2: null
 
     function disconnect() {
+        console.log("disconnect")
         if (!blocking) {
             blocking = true
-            connected = false
             message = "Отключение..."
+
             // код на плюсах
+
             pageStack.replaceAbove(null, Qt.resolvedUrl("../pages/MainPage.qml"))
             message = "Подключено"
             blocking = false
         }
     }
     function reconnect() {
+        console.log("reconnect")
         if (!blocking) {
             blocking = true
-            connected = false
             message = "Переподключение..."
+
             // код на плюсах
-            connected = true
+
+            path1 = "C:/Users/Alex/AuroraIDEProjects/SFS/qml/pages"  // 2
+            getData1()  // 2
             message = "Подключено"
             blocking = false
         }
     }
-    function startTransfer() {
+
+    function getData1() {
+        console.log("getData1")
+        directory1.clear()
+        var arr = []
+        if (path1.search("/") !== -1)
+            arr.push({ name: "..", file: false, isChecked: false })
+
+        // код на плюсах
+        arr.push({ name: "amogus.png", file: true, date_time: "2013-09-17 10:56:06", size: 46468, isChecked: false })
+        arr.push({ name: "life", file: false, isChecked: false })
+
+        number1 = arr.length
+        for (var i = 0; i < number1; i++) {
+            directory1.append(arr[i])
+        }
+    }
+    function getData2() {
+        console.log("getData2")
+        directory2.clear()
+        var arr = []
+        if (path2.search("/") !== -1)
+            arr.push({ name: "..", file: false, isChecked: false })
+
+        // код на плюсах
+        arr.push({ name: "amogus.png", file: true, date_time: "2013-09-17 10:56:06", size: 46468, isChecked: false })
+        arr.push({ name: "life", file: false, isChecked: false })
+
+        number2 = arr.length
+        for (var i = 0; i < number2; i++) {
+            directory2.append(arr[i])
+        }
+    }
+    function clearMenus() {
+        console.log("clearMenus")
+        if (menuObject1 !== null) {
+            menuObject1.destroy()
+            menuObject1 = null
+        }
+        if (menuObject2 !== null) {
+            menuObject2.destroy()
+            menuObject2 = null
+        }
+    }
+    function dedicated1() {
+        console.log("dedicated1")
+        var arr = [], elem, i
+        for (i = (directory1.get(0).name === ".." ? 1 : 0); i < number1; i++) {
+            elem = directory1.get(i)
+            if (elem.isChecked)
+                arr.push(elem)
+        }
+        return arr
+    }
+    function dedicated2() {
+        console.log("dedicated2")
+        var arr = [], elem, i
+        for (i = (directory2.get(0).name === ".." ? 1 : 0); i < number2; i++) {
+            elem = directory2.get(i)
+            if (elem.isChecked)
+                arr.push(elem)
+        }
+        return arr
+    }
+    function beforeTransfer(type, mode) {
+        console.log("beforeTransfer")
+        if (type === 1) {
+            elements = dedicated1()
+            pathElements = path1
+            remote = false
+        }
+        else {
+            elements = dedicated2()
+            pathElements = path2
+            remote = true
+        }
+        copy = mode === 2
+    }
+    function startTransfer(type, mode) {
+        console.log("startTransfer")
         if (!blocking) {
             blocking = true
+            var arr
+            if (mode !== 5) {
+                if (elements === null) {
+                    blocking = false
+                    return
+                }
+                arr = elements
+                elements = null
+            }
+            else {
+                arr = type === 1 ? dedicated1() : dedicated2()
+            }
 
-            // код на js
+            // код на плюсах
             var quantity = 41
 
             transfering = true
             for (var number = 0; number < quantity; number++) {
                 if (!transfering) {
                     // код на плюсах
+
                     break
                 }
                 message = "Обработано файлов" + number + " из " + quantity
+
                 // код на плюсах
             }
             transfering = false
@@ -58,12 +166,14 @@ Page {
         }
     }
     function stopTransfer() {
+        console.log("stopTransfer")
         if (transfering) {
             message = "Отмена операции"
             transfering = false
         }
     }
 
+    id: page
     objectName: "sftpPage"
     allowedOrientations: Orientation.Portrait
 
@@ -186,32 +296,13 @@ Page {
         }
 
         Column {
-            property string path1: ""
-            property int number1: 0
-
-            function getData() {
-                directory1.clear()
-                var arr = []
-                if (path1.search("/") !== -1)
-                    arr.push({ name: "..", file: false, isChecked: false })
-
-                // код на C++
-                arr.push({ name: "amogus.png", file: true, date_time: "2013-09-17 10:56:06", size: 46468, isChecked: false })
-                arr.push({ name: "life", file: false, isChecked: false })
-
-                number1 = arr.length
-                for (var i = 0; i < number1; i++) {
-                    directory1.append(arr[i])
-                }
-            }
-
-            id: local
             width: parent.width
             height: (parent.height - parent.children[0].height) / 2
             Component.onCompleted: {
                 // код на плюсах
+
                 path1 = "C:/Users/Alex/AuroraIDEProjects/SFS/qml/pages"
-                getData()
+                getData1()
             }
 
             Row {
@@ -251,7 +342,7 @@ Page {
                         color: "Black"
                         font.family: Theme.fontFamily
                         font.pixelSize: 32
-                        text: local.path1
+                        text: path1
                     }
                 }
             }
@@ -259,6 +350,7 @@ Page {
             ListModel {
                 id: directory1
             }
+
             ListView {
                 width: parent.width
                 height: parent.height - parent.children[0].height
@@ -300,8 +392,8 @@ Page {
                         }
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: {
-                                for (var i = 0; i < local.number1; i++) {
+                            onPressed: {
+                                for (var i = 0; i < number1; i++) {
                                     var elem = directory1.get(i)
                                     elem.isChecked = name === ".."
                                     directory1.set(i, elem)
@@ -310,10 +402,17 @@ Page {
                             }
                             onDoubleClicked: if (!file) {
                                 if (name === "..")
-                                    local.path1 = local.path1.slice(0, local.path1.lastIndexOf("/"))
+                                    path1 = path1.slice(0, path1.lastIndexOf("/"))
                                 else
-                                    local.path1 += "/" + name
-                                local.getData()
+                                    path1 += "/" + name
+                                getData1()
+                            }
+                            onPressAndHold: {
+                                clearMenus()
+                                parent.parent.z = 2
+                                menuObject1 = smallMenu1.createObject(parent.parent)
+                                menuObject1.x = mouseX
+                                menuObject1.y = mouseY
                             }
                         }
                     }
@@ -331,18 +430,18 @@ Page {
                             icon.visible = containsPress
                             children[1].visible = !containsPress
                         }
-                        onClicked: {
+                        onPressed: {
                             isChecked = !isChecked
                             var elem, i
                             if (name === "..") {
-                                for (i = 1; i < local.number1; i++) {
+                                for (i = 1; i < number1; i++) {
                                     elem = directory1.get(i)
                                     elem.isChecked = isChecked
                                     directory1.set(i, elem)
                                 }
                             }
-                            else {
-                                for (i = 1; i < local.number1; i++) {
+                            else if (directory1.get(0).name === "..") {
+                                for (i = 1; i < number1; i++) {
                                     if (!directory1.get(i).isChecked) {
                                         elem = directory1.get(0)
                                         elem.isChecked = false
@@ -355,6 +454,9 @@ Page {
                                 directory1.set(0, elem)
                             }
                         }
+                        onPressAndHold: {
+                            // подставить
+                        }
 
                         Image {
                             anchors.centerIn: parent
@@ -364,7 +466,291 @@ Page {
                         }
                     }
                 }
+
+                Component {
+                    id: largeMenu1
+
+                    Rectangle {
+                        color: "White"
+                        border.color: Theme.highlightBackgroundColor
+                        border.width: 5
+                        width: children[0].width + 10
+                        height: children[0].height + 10
+
+                        Column {
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                            anchors.margins: 5
+
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Отправить на сервер"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject1.destroy()
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Копировать"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject1.destroy()
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Вырезать"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject1.destroy()
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Удалить"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject1.destroy()
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Вставить"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject1.destroy()
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Переименновать"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject1.destroy()
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Свойства"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject1.destroy()
+                                    }
+                                }
+                            }
+
+                            Component.onCompleted: {
+                                var n = 7, maxLength = 0, i
+                                for (i = 0; i < n; i++) {
+                                    var curLength = children[i].width
+                                    if (curLength > maxLength)
+                                        maxLength = curLength
+                                }
+                                for (i = 0; i < n; i++) {
+                                    children[i].width = maxLength
+                                }
+                            }
+                        }
+                    }
+                }
             }
+
+            Component {
+                id: smallMenu1
+
+                Rectangle {
+                    color: "White"
+                    border.color: Theme.highlightBackgroundColor
+                    border.width: 5
+                    width: children[0].width + 10
+                    height: children[0].height + 10
+
+                    Column {
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.margins: 5
+
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 10
+                            bottomPadding: 10
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 32
+                            text: "Отправить на сервер"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    menuObject1.destroy()
+                                    startTransfer(1, 1)
+                                }
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 10
+                            bottomPadding: 10
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 32
+                            text: "Копировать"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    menuObject1.destroy()
+                                    beforeTransfer(1, 2)
+                                }
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 10
+                            bottomPadding: 10
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 32
+                            text: "Вырезать"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    menuObject1.destroy()
+                                    beforeTransfer(1, 3)
+                                }
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 10
+                            bottomPadding: 10
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 32
+                            text: "Удалить"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    menuObject1.destroy()
+                                    startTransfer(1, 4)
+                                }
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 10
+                            bottomPadding: 10
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 32
+                            text: "Вставить"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    menuObject1.destroy()
+                                    startTransfer(1, 5)
+                                }
+                            }
+                        }
+
+                        Component.onCompleted: {
+                            var n = 5, maxLength = 0, i
+                            for (i = 0; i < n; i++) {
+                                var curLength = children[i].width
+                                if (curLength > maxLength)
+                                    maxLength = curLength
+                            }
+                            for (i = 0; i < n; i++) {
+                                children[i].width = maxLength
+                            }
+                        }
+                    }
+                }
+            }
+
         }
     }
 }

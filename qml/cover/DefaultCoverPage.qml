@@ -13,7 +13,6 @@ CoverBackground {
     }
 
     objectName: "defaultCover"
-    id: cover
 
     CoverActionList {
         CoverAction {
@@ -40,35 +39,35 @@ CoverBackground {
         anchors.topMargin: 20
         spacing: 5
 
-        Text {
+        Label {
             anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("SFS")
             color: "White"
             font.bold: true
             font.pixelSize: 40
         }
-        Text {
+        Label {
             text: qsTr("Host:")
             font.bold: true
             font.pixelSize: 32
             color: Theme.highlightColor
             font.family: Theme.fontFamilyHeading
         }
-        Text {
+        Label {
             text: connectedVirtual ? getFirstPage().connectedHost : "-"
             font.pixelSize: 32
             color: Theme.highlightColor
             font.family: Theme.fontFamily
         }
 
-        Text {
+        Label {
             text: qsTr("Port:")
             font.bold: true
             font.pixelSize: 32
             color: Theme.highlightColor
             font.family: Theme.fontFamilyHeading
         }
-        Text {
+        Label {
             text: connectedVirtual ? getFirstPage().connectedPort : "-"
             font.pixelSize: 32
             color: Theme.highlightColor
@@ -76,13 +75,13 @@ CoverBackground {
         }
     }
 
-    Text {
+    Label {
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.right: parent.right
         anchors.rightMargin: 20
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: (cover.height - column.height - 87.5 - height) / 2 + 87.5
+        anchors.bottomMargin: (parent.height - column.height - 87.5 - height) / 2 + 87.5
 
         wrapMode: Text.Wrap
         horizontalAlignment: Text.AlignHCenter

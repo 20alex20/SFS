@@ -68,11 +68,11 @@ Page {
                             property string port: "22"
                         }
 
+                        property string lastItemText: "Новое"
                         Component.onCompleted: {
                             for(var i = 0; i < children.length; i++)
                                 children[i].color = "White"
                         }
-                        property string lastItemText: "Новое"
                         onActivated: {
                             var item = children[index]
                             if (lastItemText === item.text)
@@ -286,6 +286,7 @@ Page {
                     port.blocking = false
                     if (host.acceptableInput && userName.acceptableInput && password.acceptableInput && port.acceptableInput) {
                         // код на плюсах
+
                         var page = pageStack.replace(Qt.resolvedUrl("SftpPage.qml"))
                         page.connectedHost = host.text
                         page.connectedUserName = userName.text

@@ -4,6 +4,12 @@ import Sailfish.Silica 1.0
 Page {
     property bool connectedVirtual: true
 
+    function fix(connectedHost, connectedPort) {
+        textArea.startLine = connectedHost + ":" + connectedPort + ">"
+        textArea.length = textArea.startLine.length
+        textArea.text = textArea.startLine
+    }
+
     objectName: "sfsPage"
     allowedOrientations: Orientation.Portrait
     backgroundColor: "Black"
@@ -20,45 +26,37 @@ Page {
         wrapMode: TextEdit.WrapAnywhere
         inputMethodHints: Qt.ImhNoAutoUppercase
 
-        text: ">"
         property int length: 1
         property string startLine: ">"
         property bool blocking: false
-        onCursorPositionChanged:  {
-            if (!blocking) {
-                blocking = true
-                var pos = textArea.cursorPosition
-                if (pos >= length) {
-                    readOnly = false
-                    textArea.cursorPosition = pos
-                }
-                else {
-                    readOnly = true
-                }
-                blocking = false
+        text: ">"
+        onCursorPositionChanged: if (!blocking) {
+            var pos = cursorPosition
+            if (pos >= length) {
+                readOnly = false
+                cursorPosition = pos
+            }
+            else {
+                readOnly = true
             }
         }
         onTextChanged: {
-            if (text[text.length - 1] === '\n') {
+            if (text[text.length - 1] === "\n") {
                 blocking = true
-                text += startLine;
-                length = text.length;
-                textArea.cursorPosition = length
+
+                // код на плюсах
+
+                text += startLine
+                length = text.length
+                cursorPosition = length
                 blocking = false
             }
-            else if (text.length < length) {
+            else if (text[length - 1] !== ">") {
                 blocking = true
-                text += ">"
-                length = text.length
-                textArea.cursorPosition = length
+                text = text.slice(0, length - 1) + ">" + text.slice(length - 1)
+                cursorPosition = length - 1
                 blocking = false
             }
         }
-    }
-
-    function fix(connectedHost, connectedPort) {
-        textArea.startLine = connectedHost + ":" + connectedPort + ">"
-        textArea.length = textArea.startLine.length
-        textArea.text = textArea.startLine
     }
 }
