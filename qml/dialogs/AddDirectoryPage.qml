@@ -17,7 +17,7 @@ Dialog {
     objectName: "addDirectoryPage"
     allowedOrientations: Orientation.Portrait
     showNavigationIndicator: false
-    canAccept: directotyName.acceptableInput
+    canAccept: directoryName.acceptableInput
 
     Column {
         id: pageContainer

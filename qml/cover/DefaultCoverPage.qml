@@ -41,7 +41,7 @@ CoverBackground {
 
         Label {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr("SFS")
+            text: "SFS"
             color: "White"
             font.bold: true
             font.pixelSize: 40
@@ -85,7 +85,7 @@ CoverBackground {
 
         wrapMode: Text.Wrap
         horizontalAlignment: Text.AlignHCenter
-        text: connectedVirtual ? getFirstPage().message : "Неподключено"
+        text: connectedVirtual ? getFirstPage().message : qsTr("Not connected")
         color: "White"
         font.pixelSize: 32
     }
