@@ -48,8 +48,11 @@ SOURCES += \
 HEADERS += \
 
 DISTFILES += \
-    qml/pages/SfsPage.qml \
+    qml/pages/AddDirectoryPage.qml \
+    qml/pages/PropertiesPage.qml \
+    qml/pages/RenamePage.qml \
     qml/pages/SftpPage.qml \
+    qml/pages/SshPage.qml \
     rpm/QT.razrabotchiki.SFS.spec \
     AUTHORS.md \
     CODE_OF_CONDUCT.md \

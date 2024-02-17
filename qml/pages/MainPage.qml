@@ -39,6 +39,8 @@ Page {
                     width: pageContainer.width
                     valueColor: "White"
                     menu: ContextMenu {
+                        property string lastItemText: "Новое"
+
                         MenuItem {
                             text: "Новое"
                             property string host: ""
@@ -68,7 +70,6 @@ Page {
                             property string port: "22"
                         }
 
-                        property string lastItemText: "Новое"
                         Component.onCompleted: {
                             for(var i = 0; i < children.length; i++)
                                 children[i].color = "White"
@@ -110,11 +111,8 @@ Page {
                     font.family: Theme.fontFamilyHeading
                 }
                 TextField {
-                    id: host
-                    width: pageContainer.width
-                    color: "White"
-                    inputMethodHints: Qt.ImhFormattedNumbersOnly
-                    placeholderText: "IP-адрес"
+                    property var validate: new RegExp(/^(([0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\.){3}([0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])$/)
+                    property bool blocking: true
 
                     function fix() {
                         if (text.length == 0)
@@ -124,8 +122,12 @@ Page {
                         else
                             label = ""
                     }
-                    property var validate: new RegExp(/^(([0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\.){3}([0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])$/)
-                    property bool blocking: true
+
+                    id: host
+                    width: pageContainer.width
+                    color: "White"
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    placeholderText: "IP-адрес"
                     label: ""
                     hideLabelOnEmptyField: false
                     labelVisible: label !== ""
@@ -154,15 +156,16 @@ Page {
                     font.family: Theme.fontFamilyHeading
                 }
                 TextField {
-                    id: userName
-                    width: pageContainer.width
-                    color: "White"
-                    placeholderText: ""
+                    property bool blocking: true
 
                     function fix() {
                         labelVisible = text.length == 0
                     }
-                    property bool blocking: true
+
+                    id: userName
+                    width: pageContainer.width
+                    color: "White"
+                    placeholderText: ""
                     label: "Поле не заполненно"
                     hideLabelOnEmptyField: false
                     labelVisible: false
@@ -191,16 +194,17 @@ Page {
                     font.family: Theme.fontFamilyHeading
                 }
                 TextField {
+                    property bool blocking: true
+
+                    function fix() {
+                        labelVisible = text.length == 0
+                    }
+
                     id: password
                     width: pageContainer.width
                     color: "White"
                     echoMode: TextInput.Password
                     placeholderText: ""
-
-                    function fix() {
-                        labelVisible = text.length == 0
-                    }
-                    property bool blocking: true
                     label: "Поле не заполненно"
                     hideLabelOnEmptyField: false
                     labelVisible: false
@@ -229,12 +233,7 @@ Page {
                     font.family: Theme.fontFamilyHeading
                 }
                 TextField {
-                    id: port
-                    width: pageContainer.width
-                    color: "White"
-                    text: "22"
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    placeholderText: "0 - 65535"
+                    property bool blocking: true
 
                     function fix() {
                         if (text.length == 0)
@@ -251,7 +250,13 @@ Page {
                         var num = Number(text)
                         return 0 <= num && num <= 65535
                     }
-                    property bool blocking: true
+
+                    id: port
+                    width: pageContainer.width
+                    color: "White"
+                    text: "22"
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    placeholderText: "0 - 65535"
                     label: ""
                     hideLabelOnEmptyField: false
                     labelVisible: label !== ""
@@ -284,6 +289,7 @@ Page {
                     userName.blocking = false
                     password.blocking = false
                     port.blocking = false
+
                     if (host.acceptableInput && userName.acceptableInput && password.acceptableInput && port.acceptableInput) {
                         // код на плюсах
 
@@ -293,15 +299,25 @@ Page {
                         page.connectedPassword = password.text
                         page.connectedPort = port.text
 
-                        pageStack.pushAttached(Qt.resolvedUrl("SfsPage.qml"))
-                        pageStack.nextPage().fix(host.text, port.text)
+                        pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
+                        pageStack.nextPage().init(host.text, port.text)
                     }
                     else {
+                        host.readOnly = true
+                        userName.readOnly = true
+                        password.readOnly = true
+                        port.readOnly = true
+
                         host.focus = true
                         userName.focus = true
                         password.focus = true
                         port.focus = true
                         port.focus = false
+
+                        host.readOnly = false
+                        userName.readOnly = false
+                        password.readOnly = false
+                        port.readOnly = false
                     }
                 }
             }

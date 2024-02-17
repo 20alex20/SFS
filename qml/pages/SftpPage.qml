@@ -9,30 +9,74 @@ Page {
     property string connectedPassword: ""
     property string connectedPort: ""
 
-    property bool blocking: false
     property string message: "Подключено"
+    property bool blocking: false
     property bool transfering: false
-    property var elements: null  // Array
-    property string pathElements: ""
-    property bool remote: false
-    property bool copy: false
+
+    //
+    property var currentElement: null
 
     property string path1: ""
     property int number1: 0
-    property QtObject menuObject1: null
+    property var menuObject: null
     property string path2: ""
     property int number2: 0
-    property QtObject menuObject2: null
+
+    property int type2: 1
+    property int mode2: 1
+    property var elements: null
+    property string pathElements: ""
+    //
+
+    function init(h, un, pw, p) {
+        connectedHost = h
+        connectedUserName = un
+        connectedPassword = pw
+        connectedPort = p
+    }
+
+    function reloadData1() {
+        console.log("reloadData1")
+        data1.clear()
+        var arr = []
+        if (path1.search("/") !== -1)
+            arr.push({ name: "..", file: false, isChecked: false })
+
+        // код на плюсах
+        arr.push({ name: "amogus.png", file: true, isChecked: false })
+        arr.push({ name: "life", file: false, isChecked: false })
+
+        number1 = arr.length
+        for (var i = 0; i < number1; i++) {
+            data1.append(arr[i])
+        }
+    }
+    function reloadData2() {
+        console.log("reloadData2")
+        data2.clear()
+        var arr = []
+        if (path2.search("/") !== -1)
+            arr.push({ name: "..", file: false, isChecked: false })
+
+        // код на плюсах
+        arr.push({ name: "amogus.png", file: true, isChecked: false })
+        arr.push({ name: "life", file: false, isChecked: false })
+
+        number2 = arr.length
+        for (var i = 0; i < number2; i++) {
+            data2.append(arr[i])
+        }
+    }
 
     function disconnect() {
         console.log("disconnect")
         if (!blocking) {
             blocking = true
-            message = "Отключение..."
+            message = "Отключение"
 
             // код на плюсах
 
-            pageStack.replaceAbove(null, Qt.resolvedUrl("../pages/MainPage.qml"))
+            pageStack.replaceAbove(null, Qt.resolvedUrl("MainPage.qml"))
             message = "Подключено"
             blocking = false
         }
@@ -41,126 +85,15 @@ Page {
         console.log("reconnect")
         if (!blocking) {
             blocking = true
-            message = "Переподключение..."
+            message = "Переподключение"
+            pageStack.popAttached()
 
             // код на плюсах
+            path2 = "C:/Users/Alex/AuroraIDEProjects/SFS/qml/pages"
 
-            path1 = "C:/Users/Alex/AuroraIDEProjects/SFS/qml/pages"  // 2
-            getData1()  // 2
-            message = "Подключено"
-            blocking = false
-        }
-    }
-
-    function getData1() {
-        console.log("getData1")
-        directory1.clear()
-        var arr = []
-        if (path1.search("/") !== -1)
-            arr.push({ name: "..", file: false, isChecked: false })
-
-        // код на плюсах
-        arr.push({ name: "amogus.png", file: true, date_time: "2013-09-17 10:56:06", size: 46468, isChecked: false })
-        arr.push({ name: "life", file: false, isChecked: false })
-
-        number1 = arr.length
-        for (var i = 0; i < number1; i++) {
-            directory1.append(arr[i])
-        }
-    }
-    function getData2() {
-        console.log("getData2")
-        directory2.clear()
-        var arr = []
-        if (path2.search("/") !== -1)
-            arr.push({ name: "..", file: false, isChecked: false })
-
-        // код на плюсах
-        arr.push({ name: "amogus.png", file: true, date_time: "2013-09-17 10:56:06", size: 46468, isChecked: false })
-        arr.push({ name: "life", file: false, isChecked: false })
-
-        number2 = arr.length
-        for (var i = 0; i < number2; i++) {
-            directory2.append(arr[i])
-        }
-    }
-    function clearMenus() {
-        console.log("clearMenus")
-        if (menuObject1 !== null) {
-            menuObject1.destroy()
-            menuObject1 = null
-        }
-        if (menuObject2 !== null) {
-            menuObject2.destroy()
-            menuObject2 = null
-        }
-    }
-    function dedicated1() {
-        console.log("dedicated1")
-        var arr = [], elem, i
-        for (i = (directory1.get(0).name === ".." ? 1 : 0); i < number1; i++) {
-            elem = directory1.get(i)
-            if (elem.isChecked)
-                arr.push(elem)
-        }
-        return arr
-    }
-    function dedicated2() {
-        console.log("dedicated2")
-        var arr = [], elem, i
-        for (i = (directory2.get(0).name === ".." ? 1 : 0); i < number2; i++) {
-            elem = directory2.get(i)
-            if (elem.isChecked)
-                arr.push(elem)
-        }
-        return arr
-    }
-    function beforeTransfer(type, mode) {
-        console.log("beforeTransfer")
-        if (type === 1) {
-            elements = dedicated1()
-            pathElements = path1
-            remote = false
-        }
-        else {
-            elements = dedicated2()
-            pathElements = path2
-            remote = true
-        }
-        copy = mode === 2
-    }
-    function startTransfer(type, mode) {
-        console.log("startTransfer")
-        if (!blocking) {
-            blocking = true
-            var arr
-            if (mode !== 5) {
-                if (elements === null) {
-                    blocking = false
-                    return
-                }
-                arr = elements
-                elements = null
-            }
-            else {
-                arr = type === 1 ? dedicated1() : dedicated2()
-            }
-
-            // код на плюсах
-            var quantity = 41
-
-            transfering = true
-            for (var number = 0; number < quantity; number++) {
-                if (!transfering) {
-                    // код на плюсах
-
-                    break
-                }
-                message = "Обработано файлов" + number + " из " + quantity
-
-                // код на плюсах
-            }
-            transfering = false
+            reloadData2()
+            pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
+            pageStack.nextPage().init(connectedHost, connectedPort)
             message = "Подключено"
             blocking = false
         }
@@ -172,10 +105,164 @@ Page {
             transfering = false
         }
     }
+    function addDirectory() {
+        console.log("addDirectory")
+        if (!blocking) {
+            var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/AddDirectoryPage.qml"))
+            dialog.init(path1, path2)
+            dialog.accepted.connect(function() {
+                blocking = true
 
-    id: page
+                // код на плюсах
+
+                if (dialog.type === 1)
+                    reloadData1()
+                else
+                    reloadData2()
+                blocking = false
+            })
+        }
+    }
+
+//
+    function selected1() {
+        console.log("selected1")
+        var arr = [], elem, i = Number(data1.get(0).name === "..")
+        while (i < number1) {
+            elem = data1.get(i)
+            if (elem.isChecked)
+                arr.push(elem)
+            i++
+        }
+        return arr
+    }
+    function selected2() {
+        console.log("selected2")
+        var arr = [], elem, i = Number(data2.get(0).name === "..")
+        while (i < number2) {
+            elem = data2.get(i)
+            if (elem.isChecked)
+                arr.push(elem)
+            i++
+        }
+        return arr
+    }
+    function hold1(x, y, rect) {
+        if (!blocking) {
+            currentElement = rect
+            currentElement.z = 2
+            var elem = null
+            for (var i = 0; i < number1; i++) {
+                var curElem = data1.get(i)
+                if (curElem.isChecked) {
+                    if (elem !== null) {
+                        elem = null
+                        break
+                    }
+                    else {
+                        elem = curElem
+                    }
+                }
+            }
+            if (elem !== null)
+                menuObject = largeMenu1.createObject(currentElement)
+            else
+                menuObject = smallMenu1.createObject(currentElement)
+            x = x + menuObject.width > currentElement.width ? currentElement.width - menuObject.width : x
+            menuObject.x = x
+            menuObject.y = y
+        }
+    }
+    function clearMenus() {
+        console.log("clearMenus")
+        if (menuObject !== null) {
+            menuObject.destroy()
+            menuObject = null
+            currentElement.z = 0
+        }
+    }
+
+    function beforeTransfer(type, mode) {
+        console.log("beforeTransfer")
+        if (type === 1) {
+            elements = selected1()
+            pathElements = path1
+        }
+        else {
+            elements = selected2()
+            pathElements = path2
+        }
+        type2 = type
+        mode2 = mode
+    }
+    function startTransfer(type, mode) {
+        console.log("startTransfer")
+        blocking = true
+        var arr
+        if (mode !== 5) {
+            if (elements === null) {
+                blocking = false
+                return
+            }
+            arr = elements
+            elements = null
+        }
+        else {
+            arr = type === 1 ? selected1() : selected2()
+        }
+
+        // код на плюсах
+        var quantity = 41
+
+        transfering = true
+        for (var number = 0; number < quantity; number++) {
+            if (!transfering) {
+                // код на плюсах
+
+                break
+            }
+            message = "Обработано файлов" + number + " из " + quantity
+
+            // код на плюсах
+        }
+        transfering = false
+        message = "Подключено"
+        if (type === 1)
+            reloadData1()
+        else
+            reloadData2()
+        blocking = false
+    }
+    function rename(type, name, file) {
+        console.log("rename")
+        if (!blocking) {
+            var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/RenamePage.qml"))
+            dialog.init(type, type === 1 ? path1 : path2, name, file)
+            dialog.accepted.connect(function() {
+                blocking = true
+
+                // код на плюсах
+
+                if (dialog.type === 1)
+                    reloadData1()
+                else
+                    reloadData2()
+                blocking = false
+            })
+        }
+    }
+    function properties(type, name, file) {
+        console.log("properties")
+        if (!blocking) {
+            var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/PropertiesPage.qml"))
+            dialog.init(type, type === 1 ? path1 : path2, name, file)
+        }
+    }
+//
+
     objectName: "sftpPage"
     allowedOrientations: Orientation.Portrait
+    showNavigationIndicator: false
 
     Column {
         anchors.fill: parent
@@ -197,6 +284,7 @@ Page {
                         children[1].visible = !containsPress
                     }
                     onClicked: disconnect()
+                    onPressed: clearMenus()
 
                     Image {
                         anchors.centerIn: parent
@@ -218,6 +306,7 @@ Page {
                         children[1].visible = !containsPress
                     }
                     onClicked: reconnect()
+                    onPressed: clearMenus()
 
                     Image {
                         anchors.centerIn: parent
@@ -250,6 +339,11 @@ Page {
                     font.pixelSize: 32
                     text: message
                 }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onPressed: clearMenus()
+                }
             }
 
             Row {
@@ -264,6 +358,8 @@ Page {
                         icon.visible = containsPress
                         children[1].visible = !containsPress
                     }
+                    onClicked: stopTransfer()
+                    onPressed: clearMenus()
 
                     Image {
                         anchors.centerIn: parent
@@ -284,6 +380,8 @@ Page {
                         icon.visible = containsPress
                         children[1].visible = !containsPress
                     }
+                    onClicked: addDirectory()
+                    onPressed: clearMenus()
 
                     Image {
                         anchors.centerIn: parent
@@ -302,7 +400,7 @@ Page {
                 // код на плюсах
 
                 path1 = "C:/Users/Alex/AuroraIDEProjects/SFS/qml/pages"
-                getData1()
+                reloadData1()
             }
 
             Row {
@@ -326,6 +424,11 @@ Page {
                         font.bold: true
                         text: "Локальный<br>сервер"
                     }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onPressed: clearMenus()
+                    }
                 }
 
                 Rectangle {
@@ -344,11 +447,16 @@ Page {
                         font.pixelSize: 32
                         text: path1
                     }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onPressed: clearMenus()
+                    }
                 }
             }
 
             ListModel {
-                id: directory1
+                id: data1
             }
 
             ListView {
@@ -356,8 +464,41 @@ Page {
                 height: parent.height - parent.children[0].height
                 z: 0
                 flickDeceleration: Flickable.VerticalFlick
-                model: directory1
+                model: data1
                 delegate: Rectangle {
+                    function setPressed() {
+                        var flag = name === ".."
+                        for (var i = 0; i < number1; i++) {
+                            var elem = data1.get(i)
+                            if (elem.isChecked !== flag) {
+                                elem.isChecked = flag
+                                data1.set(i, elem)
+                            }
+                        }
+                        isChecked = true
+                    }
+                    function setPressed2() {
+                        isChecked = !isChecked
+                        if (data1.get(0).name !== "..")
+                            return
+                        var allTrue = true, flag = name === ".."
+                        for (var i = 1; i < number1; i++) {
+                            var elem = data1.get(i)
+                            if (flag && elem.isChecked !== isChecked) {
+                                elem.isChecked = isChecked
+                                data1.set(i, elem)
+                            }
+                            if (!elem.isChecked)
+                                allTrue = false
+                        }
+                        elem = data1.get(0)
+                        elem.isChecked = allTrue
+                        data1.set(0, elem)
+                    }
+
+                    property bool localBlocking: false
+
+                    id: rect1
                     width: parent.width
                     height: 80
                     color: isChecked ? Theme.highlightColor.toString().replace("#", "#80") : "transparent"
@@ -392,27 +533,21 @@ Page {
                         }
                         MouseArea {
                             anchors.fill: parent
-                            onPressed: {
-                                for (var i = 0; i < number1; i++) {
-                                    var elem = directory1.get(i)
-                                    elem.isChecked = name === ".."
-                                    directory1.set(i, elem)
-                                }
-                                isChecked = true
+                            onPressed: clearMenus()
+                            onReleased: rect1.localBlocking = false
+                            onClicked: if (!rect1.localBlocking) rect1.setPressed()
+                            onPressAndHold: {
+                                if (!isChecked)
+                                    rect1.setPressed()
+                                localBlocking = true
+                                hold1(mouseX, mouseY, rect1)
                             }
-                            onDoubleClicked: if (!file) {
+                            onDoubleClicked: if (!blocking && !file) {
                                 if (name === "..")
                                     path1 = path1.slice(0, path1.lastIndexOf("/"))
                                 else
                                     path1 += "/" + name
-                                getData1()
-                            }
-                            onPressAndHold: {
-                                clearMenus()
-                                parent.parent.z = 2
-                                menuObject1 = smallMenu1.createObject(parent.parent)
-                                menuObject1.x = mouseX
-                                menuObject1.y = mouseY
+                                reloadData1()
                             }
                         }
                     }
@@ -430,32 +565,14 @@ Page {
                             icon.visible = containsPress
                             children[1].visible = !containsPress
                         }
-                        onPressed: {
-                            isChecked = !isChecked
-                            var elem, i
-                            if (name === "..") {
-                                for (i = 1; i < number1; i++) {
-                                    elem = directory1.get(i)
-                                    elem.isChecked = isChecked
-                                    directory1.set(i, elem)
-                                }
-                            }
-                            else if (directory1.get(0).name === "..") {
-                                for (i = 1; i < number1; i++) {
-                                    if (!directory1.get(i).isChecked) {
-                                        elem = directory1.get(0)
-                                        elem.isChecked = false
-                                        directory1.set(0, elem)
-                                        return
-                                    }
-                                }
-                                elem = directory1.get(0)
-                                elem.isChecked = true
-                                directory1.set(0, elem)
-                            }
-                        }
+                        onPressed: clearMenus()
+                        onReleased: rect1.localBlocking = false
+                        onClicked: if (!rect1.localBlocking) rect1.setPressed2()
                         onPressAndHold: {
-                            // подставить
+                            if (!isChecked)
+                                rect1.setPressed2()
+                            localBlocking = true
+                            hold1(mouseX, mouseY, rect1)
                         }
 
                         Image {
@@ -469,6 +586,186 @@ Page {
 
                 Component {
                     id: largeMenu1
+
+                    Rectangle {
+                        property bool file: false
+                        property string fileDirectoryName: ""
+
+                        id: rect
+                        color: "White"
+                        border.color: Theme.highlightBackgroundColor
+                        border.width: 5
+                        width: children[0].width + 10
+                        height: children[0].height + 10
+
+                        Column {
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                            anchors.margins: 5
+
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Отправить на сервер"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject.destroy()
+                                        startTransfer(1, 1)
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Копировать"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject.destroy()
+                                        beforeTransfer(1, 2)
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Вырезать"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject.destroy()
+                                        beforeTransfer(1, 3)
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Удалить"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject.destroy()
+                                        startTransfer(1, 4)
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Вставить"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject.destroy()
+                                        startTransfer(1, 5)
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Переименовать"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject.destroy()
+                                        rename(1, rect.fileDirectoryName, rect.file)
+                                    }
+                                }
+                            }
+                            Label {
+                                leftPadding: 20
+                                rightPadding: 20
+                                topPadding: 10
+                                bottomPadding: 10
+
+                                color: children[0].pressed ? Theme.highlightColor : "Black"
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 32
+                                text: "Свойства"
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        menuObject.destroy()
+                                        properties(1, rect.fileDirectoryName, rect.file)
+                                    }
+                                }
+                            }
+
+                            Component.onCompleted: {
+                                var n = 7, maxLength = 0, i
+                                for (i = 0; i < n; i++) {
+                                    var curLength = children[i].width
+                                    if (curLength > maxLength)
+                                        maxLength = curLength
+                                }
+                                for (i = 0; i < n; i++) {
+                                    children[i].width = maxLength
+                                }
+                            }
+                        }
+
+                        Component.onCompleted: {
+                            var elem = null
+                            for (var i = 0; i < number1; i++) {
+                                var curElem = data1.get(i)
+                                if (curElem.isChecked) {
+                                    elem = curElem
+                                }
+                            }
+                            file = elem.file
+                            fileDirectoryName = elem.name
+                        }
+                    }
+                }
+
+                Component {
+                    id: smallMenu1
 
                     Rectangle {
                         color: "White"
@@ -496,7 +793,8 @@ Page {
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: {
-                                        menuObject1.destroy()
+                                        menuObject.destroy()
+                                        startTransfer(1, 1)
                                     }
                                 }
                             }
@@ -514,7 +812,8 @@ Page {
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: {
-                                        menuObject1.destroy()
+                                        menuObject.destroy()
+                                        beforeTransfer(1, 2)
                                     }
                                 }
                             }
@@ -532,7 +831,8 @@ Page {
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: {
-                                        menuObject1.destroy()
+                                        menuObject.destroy()
+                                        beforeTransfer(1, 3)
                                     }
                                 }
                             }
@@ -550,7 +850,8 @@ Page {
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: {
-                                        menuObject1.destroy()
+                                        menuObject.destroy()
+                                        startTransfer(1, 4)
                                     }
                                 }
                             }
@@ -568,49 +869,14 @@ Page {
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: {
-                                        menuObject1.destroy()
-                                    }
-                                }
-                            }
-                            Label {
-                                leftPadding: 20
-                                rightPadding: 20
-                                topPadding: 10
-                                bottomPadding: 10
-
-                                color: children[0].pressed ? Theme.highlightColor : "Black"
-                                font.family: Theme.fontFamily
-                                font.pixelSize: 32
-                                text: "Переименновать"
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        menuObject1.destroy()
-                                    }
-                                }
-                            }
-                            Label {
-                                leftPadding: 20
-                                rightPadding: 20
-                                topPadding: 10
-                                bottomPadding: 10
-
-                                color: children[0].pressed ? Theme.highlightColor : "Black"
-                                font.family: Theme.fontFamily
-                                font.pixelSize: 32
-                                text: "Свойства"
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        menuObject1.destroy()
+                                        menuObject.destroy()
+                                        startTransfer(1, 5)
                                     }
                                 }
                             }
 
                             Component.onCompleted: {
-                                var n = 7, maxLength = 0, i
+                                var n = 5, maxLength = 0, i
                                 for (i = 0; i < n; i++) {
                                     var curLength = children[i].width
                                     if (curLength > maxLength)
@@ -624,133 +890,6 @@ Page {
                     }
                 }
             }
-
-            Component {
-                id: smallMenu1
-
-                Rectangle {
-                    color: "White"
-                    border.color: Theme.highlightBackgroundColor
-                    border.width: 5
-                    width: children[0].width + 10
-                    height: children[0].height + 10
-
-                    Column {
-                        anchors.top: parent.top
-                        anchors.left: parent.left
-                        anchors.margins: 5
-
-                        Label {
-                            leftPadding: 20
-                            rightPadding: 20
-                            topPadding: 10
-                            bottomPadding: 10
-
-                            color: children[0].pressed ? Theme.highlightColor : "Black"
-                            font.family: Theme.fontFamily
-                            font.pixelSize: 32
-                            text: "Отправить на сервер"
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    menuObject1.destroy()
-                                    startTransfer(1, 1)
-                                }
-                            }
-                        }
-                        Label {
-                            leftPadding: 20
-                            rightPadding: 20
-                            topPadding: 10
-                            bottomPadding: 10
-
-                            color: children[0].pressed ? Theme.highlightColor : "Black"
-                            font.family: Theme.fontFamily
-                            font.pixelSize: 32
-                            text: "Копировать"
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    menuObject1.destroy()
-                                    beforeTransfer(1, 2)
-                                }
-                            }
-                        }
-                        Label {
-                            leftPadding: 20
-                            rightPadding: 20
-                            topPadding: 10
-                            bottomPadding: 10
-
-                            color: children[0].pressed ? Theme.highlightColor : "Black"
-                            font.family: Theme.fontFamily
-                            font.pixelSize: 32
-                            text: "Вырезать"
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    menuObject1.destroy()
-                                    beforeTransfer(1, 3)
-                                }
-                            }
-                        }
-                        Label {
-                            leftPadding: 20
-                            rightPadding: 20
-                            topPadding: 10
-                            bottomPadding: 10
-
-                            color: children[0].pressed ? Theme.highlightColor : "Black"
-                            font.family: Theme.fontFamily
-                            font.pixelSize: 32
-                            text: "Удалить"
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    menuObject1.destroy()
-                                    startTransfer(1, 4)
-                                }
-                            }
-                        }
-                        Label {
-                            leftPadding: 20
-                            rightPadding: 20
-                            topPadding: 10
-                            bottomPadding: 10
-
-                            color: children[0].pressed ? Theme.highlightColor : "Black"
-                            font.family: Theme.fontFamily
-                            font.pixelSize: 32
-                            text: "Вставить"
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    menuObject1.destroy()
-                                    startTransfer(1, 5)
-                                }
-                            }
-                        }
-
-                        Component.onCompleted: {
-                            var n = 5, maxLength = 0, i
-                            for (i = 0; i < n; i++) {
-                                var curLength = children[i].width
-                                if (curLength > maxLength)
-                                    maxLength = curLength
-                            }
-                            for (i = 0; i < n; i++) {
-                                children[i].width = maxLength
-                            }
-                        }
-                    }
-                }
-            }
-
         }
     }
 }

@@ -4,17 +4,22 @@ import Sailfish.Silica 1.0
 Page {
     property bool connectedVirtual: true
 
-    function fix(connectedHost, connectedPort) {
-        textArea.startLine = connectedHost + ":" + connectedPort + ">"
+    function init(ch, cp) {
+        textArea.startLine = ch + ":" + cp + ">"
         textArea.length = textArea.startLine.length
         textArea.text = textArea.startLine
     }
 
-    objectName: "sfsPage"
+    objectName: "sshPage"
     allowedOrientations: Orientation.Portrait
+    showNavigationIndicator: false
     backgroundColor: "Black"
 
     TextArea {
+        property int length: 1
+        property string startLine: ">"
+        property bool blocking: false
+
         id: textArea
         anchors.fill: parent
         textLeftMargin: 10
@@ -25,10 +30,6 @@ Page {
         backgroundStyle: TextEditor.NoBackground
         wrapMode: TextEdit.WrapAnywhere
         inputMethodHints: Qt.ImhNoAutoUppercase
-
-        property int length: 1
-        property string startLine: ">"
-        property bool blocking: false
         text: ">"
         onCursorPositionChanged: if (!blocking) {
             var pos = cursorPosition
