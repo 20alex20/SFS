@@ -9,7 +9,7 @@ Page {
     property string connectedPassword: ""
     property string connectedPort: ""
 
-    property string message: "Подключено"
+    property string message: qsTr("Connected")
     property bool blocking: false
     property bool transfering: false
     property string path1: ""
@@ -47,7 +47,7 @@ Page {
         console.log("disconnect")
         if (!blocking) {
             blocking = true
-            message = "Отключение"
+            message = qsTr("Disconnection")
 
             // код на плюсах
 
@@ -59,7 +59,7 @@ Page {
         console.log("reconnect")
         if (!blocking) {
             blocking = true
-            message = "Переподключение"
+            message = qsTr("Reconnection")
             pageStack.popAttached()
 
             // код на плюсах
@@ -67,14 +67,14 @@ Page {
 
             pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
             pageStack.nextPage().init(connectedHost, connectedPort)
-            message = "Подключено"
+            message = qsTr("Connected")
             blocking = false
         }
     }
     function stopTransfer() {
         console.log("stopTransfer")
         if (transfering) {
-            message = "Отмена операции"
+            message = qsTr("Canceling the operation")
             transfering = false
         }
     }

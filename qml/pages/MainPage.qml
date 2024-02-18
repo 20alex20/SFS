@@ -29,7 +29,7 @@ Page {
                 Label {
                     topPadding: 30
                     leftPadding: 30
-                    text: "Соединение"
+                    text: qsTr("Connection")
                     color: Theme.highlightColor
                     font.family: Theme.fontFamilyHeading
                 }
@@ -38,7 +38,7 @@ Page {
                     id: records
 
                     ListElement {
-                        t: "Новое"
+                        t: qsTr("New")
                         h: ""
                         un: ""
                         pw: ""
@@ -83,7 +83,7 @@ Page {
                                 return
 
                             if (lastIndex === 0)
-                                records.set(0, { "t": "Новое", "h": host.text, "un": userName.text, "pw": password.text, "p": port.text })
+                                records.set(0, { "t": qsTr("New"), "h": host.text, "un": userName.text, "pw": password.text, "p": port.text })
                             lastIndex = index
 
                             var flag = index !== 0
@@ -106,7 +106,7 @@ Page {
                 Label {
                     leftPadding: 30
                     bottomPadding: 15
-                    text: "Хост"
+                    text: qsTr("Host")
                     color: Theme.highlightColor
                     font.family: Theme.fontFamilyHeading
                 }
@@ -116,9 +116,9 @@ Page {
 
                     function fix() {
                         if (text.length == 0)
-                            label = "Поле не заполненно"
+                            label = qsTr("Field is empty")
                         else if (!validate.test(text))
-                            label = "Поле заполненно не верно"
+                            label = qsTr("The field is filled in incorrectly")
                         else
                             label = ""
                     }
@@ -127,7 +127,7 @@ Page {
                     width: pageContainer.width
                     color: "White"
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
-                    placeholderText: "IP-адрес"
+                    placeholderText: qsTr("IP-address")
                     label: ""
                     hideLabelOnEmptyField: false
                     labelVisible: label !== ""
@@ -151,7 +151,7 @@ Page {
                 Label {
                     leftPadding: 30
                     bottomPadding: 15
-                    text: "Имя пользователя"
+                    text: qsTr("User name")
                     color: Theme.highlightColor
                     font.family: Theme.fontFamilyHeading
                 }
@@ -166,7 +166,7 @@ Page {
                     width: pageContainer.width
                     color: "White"
                     placeholderText: ""
-                    label: "Поле не заполненно"
+                    label: qsTr("Field is empty")
                     hideLabelOnEmptyField: false
                     labelVisible: false
                     acceptableInput: blocking || text.length > 0
@@ -189,7 +189,7 @@ Page {
                 Label {
                     leftPadding: 30
                     bottomPadding: 15
-                    text: "Пароль"
+                    text: qsTr("Password")
                     color: Theme.highlightColor
                     font.family: Theme.fontFamilyHeading
                 }
@@ -205,7 +205,7 @@ Page {
                     color: "White"
                     echoMode: TextInput.Password
                     placeholderText: ""
-                    label: "Поле не заполненно"
+                    label: qsTr("Field is empty")
                     hideLabelOnEmptyField: false
                     labelVisible: false
                     acceptableInput: blocking || text.length > 0
@@ -228,7 +228,7 @@ Page {
                 Label {
                     leftPadding: 30
                     bottomPadding: 15
-                    text: "Порт"
+                    text: qsTr("Port")
                     color: Theme.highlightColor
                     font.family: Theme.fontFamilyHeading
                 }
@@ -237,9 +237,9 @@ Page {
 
                     function fix() {
                         if (text.length == 0)
-                            label = "Поле не заполненно"
+                            label = qsTr("Field is empty")
                         else if (!validate(text))
-                            label = "Поле заполненно не верно"
+                            label = qsTr("The field is filled in incorrectly")
                         else
                             label = ""
                     }
@@ -279,7 +279,7 @@ Page {
             Button {
                 id: button
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "Подключиться"
+                text: qsTr("Connect")
                 border.color: Theme.highlightColor
                 border.highlightColor: Theme.highlightColor
                 color: Theme.highlightColor

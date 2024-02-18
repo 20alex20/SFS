@@ -14,10 +14,12 @@ Dialog {
         path = p
         name = n
         file = f
+        var units = [qsTr("B"), qsTr("Kb"), qsTr("Mb"), qsTr("Gb")]
 
         // код на плюсах
         dateTime.text = "12.02.2024"
-        size.text = "12 Мб"
+
+        size.text = "12" + " " + units[2]
     }
 
     objectName: "propertiesPage"
@@ -31,14 +33,14 @@ Dialog {
 
         DialogHeader {
             acceptText: ""
-            cancelText: "Назад"
+            cancelText: qsTr("Back")
         }
 
         Column {
             Label {
                 leftPadding: 30
                 bottomPadding: 15
-                text: "Тип"
+                text: qsTr("Type")
                 color: Theme.highlightColor
                 font.family: Theme.fontFamilyHeading
             }
@@ -46,7 +48,7 @@ Dialog {
                 width: pageContainer.width
                 color: "White"
                 readOnly: true
-                text: file ? "Файл" : "Папка"
+                text: file ? qsTr("File") : qsTr("Folder")
             }
         }
 
@@ -55,7 +57,7 @@ Dialog {
                 topPadding: 20
                 leftPadding: 30
                 bottomPadding: 15
-                text: "Название"
+                text: qsTr("Name")
                 color: Theme.highlightColor
                 font.family: Theme.fontFamilyHeading
             }
@@ -72,7 +74,7 @@ Dialog {
                 topPadding: 20
                 leftPadding: 30
                 bottomPadding: 15
-                text: "Дата изменения"
+                text: qsTr("Size")
                 color: Theme.highlightColor
                 font.family: Theme.fontFamilyHeading
             }
@@ -89,7 +91,7 @@ Dialog {
                 topPadding: 20
                 leftPadding: 30
                 bottomPadding: 15
-                text: "Дата изменения"
+                text: qsTr("Modification date")
                 color: Theme.highlightColor
                 font.family: Theme.fontFamilyHeading
             }

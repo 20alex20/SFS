@@ -111,12 +111,12 @@ Column {
 
                 break
             }
-            vars.message = "Обработано файлов" + num + " из " + quantity
+            vars.message = qsTr("Processed") + num + " " + qsTr("out of") + " " + quantity
 
             // код на плюсах
         }
         vars.transfering = false
-        vars.message = "Подключено"
+        vars.message = qsTr("Connected")
         reloadData()
         vars.blocking = false
     }
@@ -159,7 +159,7 @@ Column {
                 font.family: Theme.fontFamilyHeading
                 font.pixelSize: 30
                 font.bold: true
-                text: type === 1 ? "Локальное<br>хранилище" : "Удаленное<br>хранилище"
+                text: type === 1 ? qsTr("Local storage").replace(" ", "<br>") : qsTr("Remote storage").replace(" ", "<br>")
             }
             MouseArea {
                 anchors.fill: parent
@@ -238,14 +238,14 @@ Column {
             id: rect
             width: parent.width
             height: 80
-            color: isChecked ? Theme.highlightColor.toString().replace("#", "#80") : "transparent"
+            color: isChecked ? Theme.highlightColor.toString().replace("#", "#80") : "Transparent"
 
             Rectangle {
                 anchors.left: parent.left
                 anchors.top: parent.top
                 width: parent.width - parent.children[1].width
                 height: parent.height
-                color: "transparent"
+                color: "Transparent"
 
                 Image {
                     anchors.left: parent.left
@@ -353,7 +353,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Отправить на сервер"
+                            text: type === 1 ? qsTr("Upload to server") : qsTr("Download from server")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -369,7 +369,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Копировать"
+                            text: qsTr("Copy")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -385,7 +385,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Вырезать"
+                            text: qsTr("Cut")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -401,7 +401,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Удалить"
+                            text: qsTr("Delete")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -417,7 +417,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Вставить"
+                            text: qsTr("Insert")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -433,7 +433,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Переименовать"
+                            text: qsTr("Rename")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -449,7 +449,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Свойства"
+                            text: qsTr("Properties")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -511,7 +511,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Отправить на сервер"
+                            text: type === 1 ? qsTr("Upload to server") : qsTr("Download from server")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -527,7 +527,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Копировать"
+                            text: qsTr("Copy")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -543,7 +543,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Вырезать"
+                            text: qsTr("Cut")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -559,7 +559,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Удалить"
+                            text: qsTr("Delete")
 
                             MouseArea {
                                 anchors.fill: parent
@@ -575,7 +575,7 @@ Column {
                             color: children[0].pressed ? Theme.highlightColor : "Black"
                             font.family: Theme.fontFamily
                             font.pixelSize: 30
-                            text: "Вставить"
+                            text: qsTr("Insert")
 
                             MouseArea {
                                 anchors.fill: parent

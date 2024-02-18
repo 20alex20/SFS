@@ -26,22 +26,22 @@ Dialog {
         width: parent.width
 
         DialogHeader {
-            acceptText: "Переименовать"
-            cancelText: "Отмена"
+            acceptText: qsTr("Rename")
+            cancelText: qsTr("Cancel")
         }
         Label {
             leftPadding: 30
             bottomPadding: 15
-            text: "Название папки"
+            text: qsTr("Name")
             color: Theme.highlightColor
             font.family: Theme.fontFamilyHeading
         }
         TextField {
             function fix() {
                 if (text.length == 0)
-                    label = "Поле не заполненно"
+                    label = qsTr("Field is empty")
                 else if (!validate(text))
-                    label = (file ? "Файл" : "Папка") + " с таким именем уже существует"
+                    label = (file ? qsTr("File") : qsTr("Folder")) + " " + qsTr("with the same name already exists")
                 else
                     label = ""
             }
@@ -55,6 +55,7 @@ Dialog {
             id: fileDirectoryName
             width: pageContainer.width
             color: "White"
+            placeholderText: ""
             label: ""
             hideLabelOnEmptyField: false
             labelVisible: label !== ""

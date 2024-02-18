@@ -24,15 +24,15 @@ Dialog {
         width: parent.width
 
         DialogHeader {
-            acceptText: "Создать"
-            cancelText: "Отмена"
+            acceptText: qsTr("Create")
+            cancelText: qsTr("Cancel")
         }
 
         Column {
             Label {
                 topPadding: 30
                 leftPadding: 30
-                text: "Хранилище"
+                text: qsTr("Storage")
                 color: Theme.highlightColor
                 font.family: Theme.fontFamilyHeading
             }
@@ -43,10 +43,10 @@ Dialog {
                 valueColor: "White"
                 menu: ContextMenu {
                     MenuItem {
-                        text: "Удаленное"
+                        text: qsTr("Remote")
                     }
                     MenuItem {
-                        text: "Локальное"
+                        text: qsTr("Local")
                     }
 
                     onActivated: type = index === 0 ? 2 : 1
@@ -63,16 +63,16 @@ Dialog {
                 topPadding: 20
                 leftPadding: 30
                 bottomPadding: 15
-                text: "Название папки"
+                text: qsTr("Folder name")
                 color: Theme.highlightColor
                 font.family: Theme.fontFamilyHeading
             }
             TextField {
                 function fix() {
                     if (text.length == 0)
-                        label = "Поле не заполненно"
+                        label = qsTr("Field is empty")
                     else if (!validate(text))
-                        label = "Папка с таким именем уже существует"
+                        label = qsTr("A folder with the same name already exists")
                     else
                         label = ""
                 }
@@ -86,6 +86,7 @@ Dialog {
                 id: directoryName
                 width: pageContainer.width
                 color: "White"
+                placeholderText: ""
                 label: ""
                 hideLabelOnEmptyField: false
                 labelVisible: label !== ""
