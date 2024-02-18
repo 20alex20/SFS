@@ -210,7 +210,7 @@ Page {
                 IconButton {
                     width: 100
                     height: 100
-                    icon.source: "../icons/buttons/70x70/cancel.png"
+                    icon.source: "../icons/buttons/70x70/add_directory.png"
                     icon.width: 70
                     icon.height: 70
                     icon.visible: false
