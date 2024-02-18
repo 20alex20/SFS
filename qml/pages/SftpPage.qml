@@ -14,8 +14,11 @@ Page {
     property bool transfering: false
     property string path1: ""
     property string path2: ""
+    property var reload1: null
+    property var reload2: null
     property var menuObject: null
     property var currentElement: null
+    property var currentRow: null
 
     property int typeElements: 1
     property int modeElements: 1
@@ -35,13 +38,9 @@ Page {
             menuObject.destroy()
             menuObject = null
             currentElement.z = 0
+            currentRow.z = 1
+            loader1.z = 0
         }
-    }
-    function setPath(t, p) {
-        if (t === 1)
-            path1 = p
-        else
-            path2 = p
     }
 
     function disconnect() {
@@ -53,7 +52,6 @@ Page {
             // код на плюсах
 
             pageStack.replaceAbove(null, Qt.resolvedUrl("MainPage.qml"))
-            message = "Подключено"
             blocking = false
         }
     }
@@ -83,13 +81,17 @@ Page {
     function addDirectory() {
         console.log("addDirectory")
         if (!blocking) {
-            blocking = true
             var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/AddDirectoryPage.qml"))
             dialog.init(path1, path2)
             dialog.accepted.connect(function() {
+                blocking = true
+
                 // код на плюсах
 
-                setPath(dialog.type, '"reload"' + (dialog.type ? dialog.path1 : dialog.path2))
+                if (dialog.type === 1)
+                    reload1.data()
+                else
+                    reload2.data()
                 blocking = false
             })
         }

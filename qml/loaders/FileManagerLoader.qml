@@ -1,25 +1,38 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 import Sailfish.Silica 1.0
 
 Column {
+    property bool onCompleted: false
+    QtObject {
+        id: reload
+        function data() {
+            reloadData()
+        }
+    }
     property var vars: {
-        var page = pageStack.currentPage
+        var page = pageStack.currentPage, p
         if (page.objectName === "sftpPage")
-            return page
+            p = page
         else
-            return pageStack.previousPage()
+            p = pageStack.previousPage()
+        if (!onCompleted && p !== null) {
+            if (type === 1)
+                p.reload1 = reload
+            else
+                p.reload2 = reload
+            onCompleted = true
+        }
+        return p
     }
     property int type: 1
-    property string path: {
-        if (vars !== null)
-            return type === 1 ? vars.path1 : vars.path2
-        else
-            return ""
-    }
+    property string path: vars !== null ? (type === 1 ? vars.path1 : vars.path2) : ""
     property bool blockingReloadData: false
 
     function reloadData() {
         records.clear()
+        if (path === "")
+            return
         var arr = []
         if (path.search("/") !== -1)
             arr.push({ name: "..", file: false, isChecked: false })
@@ -44,17 +57,22 @@ Column {
     }
     function hold(x, y, rect) {
         if (!vars.blocking) {
+            vars.children[0].children[1].z = 1
+            row.z = 0
             rect.z = 2
             var menuObject
             if (selected().length === 1)
                 menuObject = largeMenu.createObject(rect)
             else
                 menuObject = smallMenu.createObject(rect)
-            x = x + menuObject.width > rect.width ? rect.width - menuObject.width : x
+            x = x + menuObject.width > rect.width ? x - menuObject.width : x
+            if (type === 2)
+                y -= menuObject.height
             menuObject.x = x
             menuObject.y = y
-            vars.menuObject = menuObject
             vars.currentElement = rect
+            vars.menuObject = menuObject
+            vars.currentRow = row
         }
     }
 
@@ -106,23 +124,23 @@ Column {
         console.log("openDialog")
         closeMenu()
         if (!blocking) {
-            vars.blocking = true
             var elem = selected()[0]
             var dialog = pageStack.push(Qt.resolvedUrl(mode === 6 ? "../dialogs/RenamePage.qml" : "../dialogs/PropertiesPage.qml"))
             dialog.init(type, path, elem.name, elem.file)
             if (mode === 6)
                 dialog.accepted.connect(function() {
+                    vars.blocking = true
+
                     // код на плюсах
 
                     reloadData()
                     vars.blocking = false
                 })
-            else
-                vars.blocking = false
         }
     }
 
     Row {
+        id: row
         width: parent.width
         z: 1
 
@@ -164,11 +182,7 @@ Column {
                 font.family: Theme.fontFamily
                 font.pixelSize: 32
                 text: path
-                onTextChanged: {
-                    if (path.slice(0, 8) === '"reload"')
-                        vars.setPath(type, path.slice(8))
-                    reloadData()
-                }
+                onTextChanged: reloadData()
             }
             MouseArea {
                 anchors.fill: parent
@@ -186,6 +200,7 @@ Column {
         height: parent.height - parent.children[0].height
         z: 0
         flickDeceleration: Flickable.VerticalFlick
+        onMovementStarted: vars.closeMenu()
         model: records
         delegate: Rectangle {
             function setPressed() {
@@ -265,10 +280,15 @@ Column {
                         hold(mouseX, mouseY, rect)
                     }
                     onDoubleClicked: if (!vars.blocking && !file) {
+                        var p
                         if (name === "..")
-                            vars.setPath(type, path.slice(0, path.lastIndexOf("/")))
+                            p = path.slice(0, path.lastIndexOf("/"))
                         else
-                            vars.setPath(type, path + "/" + name)
+                            p = path + "/" + name
+                        if (type === 1)
+                            vars.path1 = p
+                        else
+                            vars.path2 = p
                     }
                 }
             }
@@ -308,142 +328,157 @@ Column {
         Component {
             id: largeMenu
 
-            Rectangle {
-                color: "White"
-                border.color: Theme.highlightBackgroundColor
-                border.width: 5
-                width: children[0].width + 10
-                height: children[0].height + 10
+            Item {
+                width: children[0].width
+                height: children[0].height
 
-                Column {
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.margins: 5
+                Rectangle {
+                    color: "White"
+                    border.color: Theme.highlightBackgroundColor
+                    border.width: 5
+                    width: children[0].width + 10
+                    height: children[0].height + 10
 
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
+                    Column {
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.margins: 5
 
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Отправить на сервер"
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
 
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: startTransfer(1)
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Отправить на сервер"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: startTransfer(1)
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Копировать"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: beforeTransfer(2)
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Вырезать"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: beforeTransfer(3)
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Удалить"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: startTransfer(4)
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Вставить"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: startTransfer(5)
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Переименовать"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: openDialog(6)
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Свойства"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: openDialog(7)
+                            }
+                        }
+
+                        Component.onCompleted: {
+                            var n = 7, maxLength = 0, i
+                            for (i = 0; i < n; i++) {
+                                var curLength = children[i].width
+                                if (curLength > maxLength)
+                                    maxLength = curLength
+                            }
+                            for (i = 0; i < n; i++) {
+                                children[i].width = maxLength
+                            }
                         }
                     }
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
+                }
 
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Копировать"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: beforeTransfer(2)
-                        }
-                    }
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
-
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Вырезать"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: beforeTransfer(3)
-                        }
-                    }
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
-
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Удалить"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: startTransfer(4)
-                        }
-                    }
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
-
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Вставить"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: startTransfer(5)
-                        }
-                    }
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
-
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Переименовать"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: openDialog(6)
-                        }
-                    }
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
-
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Свойства"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: openDialog(7)
-                        }
-                    }
-
-                    Component.onCompleted: {
-                        var n = 7, maxLength = 0, i
-                        for (i = 0; i < n; i++) {
-                            var curLength = children[i].width
-                            if (curLength > maxLength)
-                                maxLength = curLength
-                        }
-                        for (i = 0; i < n; i++) {
-                            children[i].width = maxLength
-                        }
-                    }
+                DropShadow {
+                    anchors.fill: parent.children[0]
+                    horizontalOffset: 8
+                    verticalOffset: 8
+                    radius: 10
+                    samples: 21
+                    color: "#80000000"
+                    source: parent.children[0]
                 }
             }
         }
@@ -451,110 +486,125 @@ Column {
         Component {
             id: smallMenu
 
-            Rectangle {
-                color: "White"
-                border.color: Theme.highlightBackgroundColor
-                border.width: 5
-                width: children[0].width + 10
-                height: children[0].height + 10
+            Item {
+                width: children[0].width
+                height: children[0].height
 
-                Column {
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.margins: 5
+                Rectangle {
+                    color: "White"
+                    border.color: Theme.highlightBackgroundColor
+                    border.width: 5
+                    width: children[0].width + 10
+                    height: children[0].height + 10
 
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
+                    Column {
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.margins: 5
 
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Отправить на сервер"
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
 
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: startTransfer(1)
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Отправить на сервер"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: startTransfer(1)
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Копировать"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: beforeTransfer(2)
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Вырезать"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: beforeTransfer(3)
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Удалить"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: startTransfer(4)
+                            }
+                        }
+                        Label {
+                            leftPadding: 20
+                            rightPadding: 20
+                            topPadding: 8
+                            bottomPadding: 8
+
+                            color: children[0].pressed ? Theme.highlightColor : "Black"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 30
+                            text: "Вставить"
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: startTransfer(5)
+                            }
+                        }
+
+                        Component.onCompleted: {
+                            var n = 5, maxLength = 0, i
+                            for (i = 0; i < n; i++) {
+                                var curLength = children[i].width
+                                if (curLength > maxLength)
+                                    maxLength = curLength
+                            }
+                            for (i = 0; i < n; i++) {
+                                children[i].width = maxLength
+                            }
                         }
                     }
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
+                }
 
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Копировать"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: beforeTransfer(2)
-                        }
-                    }
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
-
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Вырезать"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: beforeTransfer(3)
-                        }
-                    }
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
-
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Удалить"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: startTransfer(4)
-                        }
-                    }
-                    Label {
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
-
-                        color: children[0].pressed ? Theme.highlightColor : "Black"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 32
-                        text: "Вставить"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: startTransfer(5)
-                        }
-                    }
-
-                    Component.onCompleted: {
-                        var n = 5, maxLength = 0, i
-                        for (i = 0; i < n; i++) {
-                            var curLength = children[i].width
-                            if (curLength > maxLength)
-                                maxLength = curLength
-                        }
-                        for (i = 0; i < n; i++) {
-                            children[i].width = maxLength
-                        }
-                    }
+                DropShadow {
+                    anchors.fill: parent.children[0]
+                    horizontalOffset: 8
+                    verticalOffset: 8
+                    radius: 10
+                    samples: 21
+                    color: "#80000000"
+                    source: parent.children[0]
                 }
             }
         }

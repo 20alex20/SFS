@@ -34,69 +34,69 @@ Page {
                     font.family: Theme.fontFamilyHeading
                 }
 
+                ListModel {
+                    id: records
+
+                    ListElement {
+                        t: "Новое"
+                        h: ""
+                        un: ""
+                        pw: ""
+                        p: "22"
+                    }
+                }
+
                 ComboBox {
                     id: connection
                     width: pageContainer.width
                     valueColor: "White"
                     menu: ContextMenu {
-                        property string lastItemText: "Новое"
+                        property int lastIndex: 0
 
-                        MenuItem {
-                            text: "Новое"
-                            property string host: ""
-                            property string userName: ""
-                            property string password: ""
-                            property string port: "22"
-                        }
-                        MenuItem {
-                            text: "196.168.226.40"
-                            property string host: "196.168.226.40"
-                            property string userName: "qwerty"
-                            property string password: "qwerty123"
-                            property string port: "22"
-                        }
-                        MenuItem {
-                            text: "127.0.0.1"
-                            property string host: "127.0.0.1"
-                            property string userName: "alex"
-                            property string password: "alex456"
-                            property string port: "22"
-                        }
-                        MenuItem {
-                            text: "255.255.255.255"
-                            property string host: "255.255.255.255"
-                            property string userName: "fnaf"
-                            property string password: "fnaf123"
-                            property string port: "22"
+                        Repeater {
+                            model: records
+
+                            MenuItem {
+                                text: t
+                                property string host: h
+                                property string userName: un
+                                property string password: pw
+                                property string port: p
+                                color: "White"
+                            }
                         }
 
                         Component.onCompleted: {
-                            for(var i = 0; i < children.length; i++)
-                                children[i].color = "White"
+                            var arr = []
+
+                            // код на плюсах
+                            arr.push({ "t": "196.168.226.40", "h": "196.168.226.40", "un": "qwerty", "pw": "qwerty123", "p": "2222" })
+                            arr.push({ "t": "127.0.0.1", "h": "127.0.0.1", "un": "alex", "pw": "alex356", "p": "22" })
+                            arr.push({ "t": "255.255.255.255", "h": "255.255.255.255", "un": "fnaf", "pw": "fnaf", "p": "2222" })
+
+                            for (var i = 0; i < arr.length; i++) {
+                                records.append(arr[i])
+                            }
                         }
                         onActivated: {
-                            var item = children[index]
-                            if (lastItemText === item.text)
+                            if (lastIndex === index)
                                 return
 
-                            var flag = lastItemText == "Новое"
-                            if (flag) {
-                                children[0].host = host.text
-                                children[0].userName = userName.text
-                                children[0].password = password.text
-                                children[0].port = port.text
-                            }
-                            lastItemText = item.text
+                            if (lastIndex === 0)
+                                records.set(0, { "t": "Новое", "h": host.text, "un": userName.text, "pw": password.text, "p": port.text })
+                            lastIndex = index
 
+                            var flag = index !== 0
                             host.readOnly = flag
                             userName.readOnly = flag
                             password.readOnly = flag
                             port.readOnly = flag
-
-                            host.text = item.host
-                            userName.text = item.userName
-                            password.text = item.password
-                            port.text = item.port
+                            
+                            var item = records.get(index)
+                            host.text = item.h
+                            userName.text = item.un
+                            password.text = item.pw
+                            port.text = item.p
                         }
                     }
                 }
@@ -294,10 +294,7 @@ Page {
                         // код на плюсах
 
                         var page = pageStack.replace(Qt.resolvedUrl("SftpPage.qml"))
-                        page.connectedHost = host.text
-                        page.connectedUserName = userName.text
-                        page.connectedPassword = password.text
-                        page.connectedPort = port.text
+                        page.init(host.text, userName.text, password.text, port.text)
 
                         pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
                         pageStack.nextPage().init(host.text, port.text)
