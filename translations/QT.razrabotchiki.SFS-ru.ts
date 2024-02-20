@@ -165,13 +165,13 @@
         <location filename="../qml/pages/MainPage.qml" line="208"/>
         <location filename="../qml/pages/MainPage.qml" line="240"/>
         <source>Field is empty</source>
-        <translation type="unfinished">Поле не заполненно</translation>
+        <translation>Поле не заполненно</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="121"/>
         <location filename="../qml/pages/MainPage.qml" line="242"/>
         <source>The field is filled in incorrectly</source>
-        <translation type="unfinished">Поле заполненно не верно</translation>
+        <translation>Поле заполненно не верно</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="154"/>

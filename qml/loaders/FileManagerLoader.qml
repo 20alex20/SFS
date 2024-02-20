@@ -57,7 +57,8 @@ Column {
     }
     function hold(x, y, rect) {
         if (!vars.blocking) {
-            vars.children[0].children[1].z = 1
+            if (type === 1)
+                vars.children[0].children[1].z = 1
             row.z = 0
             rect.z = 2
             var menuObject
