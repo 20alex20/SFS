@@ -54,10 +54,6 @@ DISTFILES += \
     qml/pages/SftpPage.qml \
     qml/pages/SshPage.qml \
     rpm/QT.razrabotchiki.SFS.spec \
-    AUTHORS.md \
-    CODE_OF_CONDUCT.md \
-    CONTRIBUTING.md \
-    LICENSE.BSD-3-CLAUSE.md \
     README.md \
 
 AURORAAPP_ICONS = 86x86 108x108 128x128 172x172

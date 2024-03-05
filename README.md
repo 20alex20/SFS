@@ -1,15 +1,14 @@
-# Приложение SFTP- и SSH-клиента
+# SFTP/SSH client application
 
-Приложение SFTP- и SSH-клиента
+## Description
 
-The source code of the project is provided under
-[the license](LICENSE.BSD-3-CLAUSE.md),
-that allows it to be used in third-party applications.
+Using this application, the user can connect to a remote server,
+execute commands using ssh and send/receive files using sftp
 
-## Project Structure
+## Project structure
 
 The project has a common structure
-of an application based on C++ and QML for Aurora OS.
+of an application based on C++ and QML for Aurora OS.
 
 * **[QT.razrabotchiki.SFS.pro](QT.razrabotchiki.SFS.pro)** file
   describes the project structure for the qmake build system.
