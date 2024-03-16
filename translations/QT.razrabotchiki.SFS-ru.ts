@@ -65,73 +65,73 @@
 <context>
     <name>FileManagerLoader</name>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="114"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="115"/>
         <source>Processed</source>
         <translation>Обработано</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="114"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="115"/>
         <source>out of</source>
         <translation>из</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="119"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="120"/>
         <source>Connected</source>
         <translation>Подключено</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="162"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="163"/>
         <source>Local storage</source>
         <translation>Локальное хранилище</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="162"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="163"/>
         <source>Remote storage</source>
         <translation>Удаленное хранилище</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="356"/>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="514"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="357"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="515"/>
         <source>Upload to server</source>
         <translation>Загрузить на сервер</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="356"/>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="514"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="357"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="515"/>
         <source>Download from server</source>
         <translation>Скачать с сервера</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="372"/>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="530"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="373"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="531"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="388"/>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="546"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="389"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="547"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="404"/>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="562"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="405"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="563"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="420"/>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="578"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="421"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="579"/>
         <source>Insert</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="436"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="437"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../qml/loaders/FileManagerLoader.qml" line="452"/>
+        <location filename="../qml/loaders/FileManagerLoader.qml" line="453"/>
         <source>Properties</source>
         <translation>Свойства</translation>
     </message>
