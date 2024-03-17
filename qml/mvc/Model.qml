@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-QtObject {
+Item {
     function init(h, un, pw, p) {
         host = h
         userName = un
@@ -19,12 +19,8 @@ QtObject {
     property string port: ""
 
     property var path: ["", ""]
-    ListModel {
-        id: records1
-    }
-    ListModel {
-        id: records2
-    }
+    ListModel { id: records1 }
+    ListModel { id: records2 }
     property var records: [records1, records2]
 
     property int typeElements: 1
@@ -32,7 +28,7 @@ QtObject {
     property string pathElements: ""
     property var elements: null
 
-    property int loader1_z: 0
+    property int loader1Z: 0
     property var currentRow: null
     property var currentRect: null
     property var menuObject: null

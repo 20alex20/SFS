@@ -2,9 +2,16 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 CoverBackground {
-    property var model: connectedVirtual ? pageStack.currentPage.model : null
-    property var controller: connectedVirtual ? pageStack.currentPage.controller : null
-    property bool connectedVirtual: pageStack.currentPage.objectName !== "mainPage"
+    property QtObject model
+    property QtObject controller
+    property bool connectedVirtual: {
+        var flag = pageStack.currentPage.objectName !== "mainPage" && pageStack.currentPage.model !== null && pageStack.currentPage.model.port !== ""
+        if (flag) {
+            model = pageStack.currentPage.model
+            controller = pageStack.currentPage.controller
+        }
+        return flag
+    }
 
     objectName: "сover"
 

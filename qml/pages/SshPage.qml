@@ -5,6 +5,14 @@ Page {
     property QtObject model
     property QtObject controller
 
+    function init(m, c) {
+        model = m
+        controller = c
+        textArea.startLine = model.host + ":" + model.port + ">"
+        textArea.length = textArea.startLine.length
+        textArea.text = textArea.startLine
+    }
+
     objectName: "sshPage"
     showNavigationIndicator: false
     backgroundColor: "Black"
@@ -40,7 +48,7 @@ Page {
                 localBlocking = true
 
                 if (!model.blocking && text.length !== length + 1)
-                    text += controller.send_request(text.slice(length, text.length - 1)) + "\n"
+                    text += controller.sendRequest(text.slice(length, text.length - 1)) + "\n"
 
                 text += startLine
                 length = text.length
@@ -54,13 +62,5 @@ Page {
                 localBlocking = false
             }
         }
-    }
-
-    Component.onCompleted: {
-        controller = pageStack.previousPage().controller
-        model = pageStack.previousPage().model
-        textArea.startLine = model.host + ":" + model.port + ">"
-        textArea.length = textArea.startLine.length
-        textArea.text = textArea.startLine
     }
 }

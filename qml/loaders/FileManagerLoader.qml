@@ -3,7 +3,14 @@ import QtGraphicalEffects 1.0
 import Sailfish.Silica 1.0
 
 Column {
-    property QtObject model
+    ListModel { id: records }
+    QtObject {
+        id: defaultModel
+
+        property var path: [""]
+        property var records: [records]
+    }
+    property QtObject mainModel: defaultModel
     property QtObject controller
     property int type: 1
 
@@ -49,7 +56,7 @@ Column {
                 color: "Black"
                 font.family: Theme.fontFamily
                 font.pixelSize: 32
-                text: path
+                text: mainModel.path[type - 1]
             }
             MouseArea {
                 anchors.fill: parent
@@ -64,7 +71,7 @@ Column {
         z: 0
         flickDeceleration: Flickable.VerticalFlick
         onMovementStarted: controller.closeMenu()
-        model: model.records[type - 1]
+        model: mainModel.records[type - 1]
         delegate: Rectangle {
             id: rect
             width: parent.width

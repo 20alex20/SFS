@@ -2,8 +2,26 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    property QtObject model
+    QtObject {
+        id: defaultModel
+
+        property bool blocking: false
+        property string host: ""
+        property string port: ""
+        property string message: ""
+        property int loader1Z: 0
+    }
+    property QtObject model: defaultModel
     property QtObject controller
+
+    function init(m, c) {
+        model = m
+        controller = c
+        loader1.setSource("../loaders/FileManagerLoader.qml", { "type": 1, "mainModel": model, "controller": controller })
+        // controller.initialize(1)
+        loader2.setSource("../loaders/FileManagerLoader.qml", { "type": 2, "mainModel": model, "controller": controller })
+        // controller.initialize(2)
+    }
 
     objectName: "sftpPage"
     allowedOrientations: Orientation.Portrait
@@ -142,9 +160,7 @@ Page {
             id: loader1
             width: parent.width
             height: (parent.height - parent.children[0].height) / 2
-            z: model.loader1_z
-            Component.onCompleted: setSource("../loaders/FileManagerLoader.qml", { "type": 1, "model": model, "controller": controller })
-            onLoaded: controller.reboot(1)
+            z: model.loader1Z
         }
 
         Loader {
@@ -152,8 +168,6 @@ Page {
             width: parent.width
             height: parent.height - parent.children[0].height - parent.children[1].height
             z: 0
-            Component.onCompleted: setSource("../loaders/FileManagerLoader.qml", { "type": 2, "model": model, "controller": controller })
-            onLoaded: controller.reboot(2)
         }
     }
 }

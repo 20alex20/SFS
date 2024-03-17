@@ -3,8 +3,12 @@ import QtQuick 2.0
 QtObject {
     property QtObject model
 
+    function init(m) {
+        model = m
+    }
 
-    // контроллер модели
+
+    // контроллер представлений с взаимодействием с бинес-логикой на C++
     function disconnect() {
         if (!model.blocking) {
             model.blocking = true
@@ -52,13 +56,13 @@ QtObject {
             })
         }
     }
-    function reboot(type) {
+
+    function initialize(type) {
         // код на плюсах
         model.path[type - 1] = "C:/Users/Alex/AuroraIDEProjects/SFS/qml/pages"
 
         reloadData(type)
     }
-
     function reloadData(type) {
         model.records[type].clear()
         var arr = []
@@ -152,8 +156,7 @@ QtObject {
 
         return answer
     }
-
-    function send_request(request) {
+    function sendRequest(request) {
         // код на плюсах
         var answer = request
 
@@ -161,32 +164,11 @@ QtObject {
     }
 
 
-    // контроллер представлений
-    function closeMenu() {
-        if (model.menuObject !== null) {
-            model.menuObject.destroy()
-            model.menuObject = null
-            model.currentRect.z = 0
-            model.currentRow.z = 1
-            model.loader1_z = 0
-        }
-    }
-
-    function selected(type) {
-        var records = model.records[type - 1]
-        var arr = [], elem, i = Number(records.get(0).name === "..")
-        while (i < records.count) {
-            elem = records.get(i)
-            if (elem.isChecked)
-                arr.push(elem)
-            i++
-        }
-        return arr
-    }
+    // контроллер представлений, не требующий взаимодействия с бизнес-логикой
     function openMenu(type, x, y, row, rect, menu) {
         if (!model.blocking) {
             if (type === 1)
-                model.loader1_z = 1
+                model.loader1Z = 1
             row.z = 0
             rect.z = 2
 
@@ -201,6 +183,26 @@ QtObject {
             vars.currentRect = rect
             vars.menuObject = menuObject
         }
+    }
+    function closeMenu() {
+        if (model.menuObject !== null) {
+            model.menuObject.destroy()
+            model.menuObject = null
+            model.currentRect.z = 0
+            model.currentRow.z = 1
+            model.loader1Z = 0
+        }
+    }
+    function selected(type) {
+        var records = model.records[type - 1]
+        var arr = [], elem, i = Number(records.get(0).name === "..")
+        while (i < records.count) {
+            elem = records.get(i)
+            if (elem.isChecked)
+                arr.push(elem)
+            i++
+        }
+        return arr
     }
     function setPressed(type, flag) {
         var records = model.records[type - 1]

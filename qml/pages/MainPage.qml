@@ -111,7 +111,7 @@ Page {
                     property var validate: new RegExp(/^(([0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\.){3}([0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])$/)
                     property bool blocking: true
 
-                    function fix() {
+                    function getMessage() {
                         if (text.length == 0)
                             label = qsTr("Field is empty")
                         else if (!validate.test(text))
@@ -133,13 +133,13 @@ Page {
                         if (focus)
                             flicked.flickableDirection = Flickable.VerticalFlick
                         else {
-                            fix()
+                            getMessage()
                             blocking = false
                         }
                     }
                     onTextChanged: {
                         if (!blocking)
-                            fix()
+                            getMessage()
                     }
                 }
             }
@@ -155,7 +155,7 @@ Page {
                 TextField {
                     property bool blocking: true
 
-                    function fix() {
+                    function getMessage() {
                         labelVisible = text.length == 0
                     }
 
@@ -171,13 +171,13 @@ Page {
                         if (focus)
                             flicked.flickableDirection = Flickable.VerticalFlick
                         else {
-                            fix()
+                            getMessage()
                             blocking = false
                         }
                     }
                     onTextChanged: {
                         if (!blocking)
-                            fix()
+                            getMessage()
                     }
                 }
             }
@@ -193,7 +193,7 @@ Page {
                 TextField {
                     property bool blocking: true
 
-                    function fix() {
+                    function getMessage() {
                         labelVisible = text.length == 0
                     }
 
@@ -210,13 +210,13 @@ Page {
                         if (focus)
                             flicked.flickableDirection = Flickable.VerticalFlick
                         else {
-                            fix()
+                            getMessage()
                             blocking = false
                         }
                     }
                     onTextChanged: {
                         if (!blocking)
-                            fix()
+                            getMessage()
                     }
                 }
             }
@@ -232,7 +232,7 @@ Page {
                 TextField {
                     property bool blocking: true
 
-                    function fix() {
+                    function getMessage() {
                         if (text.length == 0)
                             label = qsTr("Field is empty")
                         else if (!validate(text))
@@ -262,13 +262,13 @@ Page {
                         if (focus)
                             flicked.flickableDirection = Flickable.VerticalFlick
                         else {
-                            fix()
+                            getMessage()
                             blocking = false
                         }
                     }
                     onTextChanged: {
                         if (!blocking)
-                            fix()
+                            getMessage()
                     }
                 }
             }
@@ -291,13 +291,14 @@ Page {
                         // код на плюсах
 
                         var page = pageStack.replace(Qt.resolvedUrl("SftpPage.qml"))
-                        var controller = Qt.createQmlObject(Qt.resolvedUrl("../mvc/Controller.qml"), page)
-                        page.controller = controller
-                        var model = Qt.createQmlObject(Qt.resolvedUrl("../mvc/Model.qml"), page)
+                        var model = Qt.createComponent("../mvc/Model.qml").createObject(page)
                         model.init(host.text, userName.text, password.text, port.text)
-                        page.model = model
-                        controller.model = model
-                        pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
+                        var controller = Qt.createComponent("../mvc/Controller.qml").createObject(page)
+                        controller.init(model)
+                        page.init(model, controller)
+
+                        page = pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
+                        page.init(model, controller)
                     }
                     else {
                         host.readOnly = true
