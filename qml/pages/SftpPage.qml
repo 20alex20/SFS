@@ -2,101 +2,8 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    property bool connectedVirtual: true
-
-    property string connectedHost: ""
-    property string connectedUserName: ""
-    property string connectedPassword: ""
-    property string connectedPort: ""
-
-    property string message: qsTr("Connected")
-    property bool blocking: false
-    property bool transfering: false
-    property string path1: ""
-    property string path2: ""
-    property var reload1: null
-    property var reload2: null
-    property var menuObject: null
-    property var currentElement: null
-    property var currentRow: null
-
-    property int typeElements: 1
-    property int modeElements: 1
-    property string pathElements: ""
-    property var elements: null
-
-
-    function init(ch, cun, cpw, cp) {
-        connectedHost = ch
-        connectedUserName = cun
-        connectedPassword = cpw
-        connectedPort = cp
-    }
-
-    function closeMenu() {
-        if (menuObject !== null) {
-            menuObject.destroy()
-            menuObject = null
-            currentElement.z = 0
-            currentRow.z = 1
-            loader1.z = 0
-        }
-    }
-
-    function disconnect() {
-        console.log("disconnect")
-        if (!blocking) {
-            blocking = true
-            message = qsTr("Disconnection")
-
-            // код на плюсах
-
-            pageStack.replaceAbove(null, Qt.resolvedUrl("MainPage.qml"))
-            blocking = false
-        }
-    }
-    function reconnect() {
-        console.log("reconnect")
-        if (!blocking) {
-            blocking = true
-            message = qsTr("Reconnection")
-            pageStack.popAttached()
-
-            // код на плюсах
-            path2 = "C:/Users/Alex/AuroraIDEProjects/SFS/qml"
-
-            pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
-            pageStack.nextPage().init(connectedHost, connectedPort)
-            message = qsTr("Connected")
-            blocking = false
-        }
-    }
-    function stopTransfer() {
-        console.log("stopTransfer")
-        if (transfering) {
-            message = qsTr("Canceling the operation")
-            transfering = false
-        }
-    }
-    function addDirectory() {
-        console.log("addDirectory")
-        if (!blocking) {
-            var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/AddDirectoryPage.qml"))
-            dialog.init(path1, path2)
-            dialog.accepted.connect(function() {
-                blocking = true
-
-                // код на плюсах
-
-                if (dialog.type === 1)
-                    reload1.data()
-                else
-                    reload2.data()
-                blocking = false
-            })
-        }
-    }
-
+    property QtObject model
+    property QtObject controller
 
     objectName: "sftpPage"
     allowedOrientations: Orientation.Portrait
@@ -113,16 +20,16 @@ Page {
                 IconButton {
                     width: 100
                     height: 100
-                    icon.source: "../icons/buttons/70x70/disconnect.png"
+                    icon.source: !model.blocking ? "../icons/buttons/70x70/disconnect.png" : "../icons/buttons/70x70/disconnect_2.png"
                     icon.width: 70
                     icon.height: 70
                     icon.visible: false
-                    onContainsPressChanged: {
+                    onContainsPressChanged: if (!model.blocking) {
                         icon.visible = containsPress
                         children[1].visible = !containsPress
                     }
-                    onClicked: disconnect()
-                    onPressed: closeMenu()
+                    onClicked: controller.disconnect()
+                    onPressed: controller.closeMenu()
 
                     Image {
                         anchors.centerIn: parent
@@ -135,16 +42,16 @@ Page {
                 IconButton {
                     width: 100
                     height: 100
-                    icon.source: "../icons/buttons/70x70/refresh.png"
+                    icon.source: !model.blocking ? "../icons/buttons/70x70/refresh.png" : "../icons/buttons/70x70/refresh_2.png"
                     icon.width: 70
                     icon.height: 70
                     icon.visible: false
-                    onContainsPressChanged: {
+                    onContainsPressChanged: if (!model.blocking) {
                         icon.visible = containsPress
                         children[1].visible = !containsPress
                     }
-                    onClicked: reconnect()
-                    onPressed: closeMenu()
+                    onClicked: controller.reconnect()
+                    onPressed: controller.closeMenu()
 
                     Image {
                         anchors.centerIn: parent
@@ -175,12 +82,12 @@ Page {
                     color: "Black"
                     font.family: Theme.fontFamilyHeading
                     font.pixelSize: 32
-                    text: message
+                    text: model.message
                 }
 
                 MouseArea {
                     anchors.fill: parent
-                    onPressed: closeMenu()
+                    onPressed: controller.closeMenu()
                 }
             }
 
@@ -188,16 +95,16 @@ Page {
                 IconButton {
                     width: 100
                     height: 100
-                    icon.source: transfering ? "../icons/buttons/70x70/cancel.png" : "../icons/buttons/70x70/cancel_2.png"
+                    icon.source: !model.blocking ? "../icons/buttons/70x70/cancel.png" : "../icons/buttons/70x70/cancel_2.png"
                     icon.width: 70
                     icon.height: 70
                     icon.visible: false
-                    onContainsPressChanged: {
+                    onContainsPressChanged: if (!model.blocking) {
                         icon.visible = containsPress
                         children[1].visible = !containsPress
                     }
-                    onClicked: stopTransfer()
-                    onPressed: closeMenu()
+                    onClicked: controller.stopTransfer()
+                    onPressed: controller.closeMenu()
 
                     Image {
                         anchors.centerIn: parent
@@ -210,16 +117,16 @@ Page {
                 IconButton {
                     width: 100
                     height: 100
-                    icon.source: "../icons/buttons/70x70/add_directory.png"
+                    icon.source: !model.blocking ? "../icons/buttons/70x70/add_directory.png" : "../icons/buttons/70x70/add_directory.png"
                     icon.width: 70
                     icon.height: 70
                     icon.visible: false
-                    onContainsPressChanged: {
+                    onContainsPressChanged: if (!model.blocking) {
                         icon.visible = containsPress
                         children[1].visible = !containsPress
                     }
-                    onClicked: addDirectory()
-                    onPressed: closeMenu()
+                    onClicked: controller.addDirectory()
+                    onPressed: controller.closeMenu()
 
                     Image {
                         anchors.centerIn: parent
@@ -235,12 +142,9 @@ Page {
             id: loader1
             width: parent.width
             height: (parent.height - parent.children[0].height) / 2
-            z: 0
-            Component.onCompleted: setSource("../loaders/FileManagerLoader.qml", { "type": 1 })
-            onLoaded: {
-                // код на плюсах
-                path1 = "C:/Users/Alex/AuroraIDEProjects/SFS/qml/pages"
-            }
+            z: model.loader1_z
+            Component.onCompleted: setSource("../loaders/FileManagerLoader.qml", { "type": 1, "model": model, "controller": controller })
+            onLoaded: controller.reboot(1)
         }
 
         Loader {
@@ -248,11 +152,8 @@ Page {
             width: parent.width
             height: parent.height - parent.children[0].height - parent.children[1].height
             z: 0
-            Component.onCompleted: setSource("../loaders/FileManagerLoader.qml", { "type": 2 })
-            onLoaded: {
-                // код на плюсах
-                path2 = "C:/Users/Alex/AuroraIDEProjects/SFS/qml/pages"
-            }
+            Component.onCompleted: setSource("../loaders/FileManagerLoader.qml", { "type": 2, "model": model, "controller": controller })
+            onLoaded: controller.reboot(2)
         }
     }
 }

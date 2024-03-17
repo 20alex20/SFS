@@ -2,30 +2,24 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 CoverBackground {
-    property bool connectedVirtual: pageStack.currentPage.connectedVirtual
-
-    function getFirstPage() {
-        var page = pageStack.currentPage
-        if (page.objectName === "sftpPage")
-            return page
-        else
-            return pageStack.previousPage()
-    }
+    property QtObject model: connectedVirtual ? pageStack.currentPage.model : null
+    property QtObject controller: connectedVirtual ? pageStack.currentPage.controller : null
+    property bool connectedVirtual: pageStack.currentPage.objectName !== "mainPage"
 
     objectName: "defaultCover"
 
     CoverActionList {
         CoverAction {
-            iconSource: connectedVirtual ? "../icons/buttons/40x40/disconnect.png" : "../icons/buttons/40x40/disconnect_2.png"
-            onTriggered: if (connectedVirtual) getFirstPage().disconnect()
+            iconSource: connectedVirtual && !model.blocking ? "../icons/buttons/40x40/disconnect.png" : "../icons/buttons/40x40/disconnect_2.png"
+            onTriggered: if (connectedVirtual) controller.disconnect()
         }
         CoverAction {
-            iconSource: connectedVirtual ? "../icons/buttons/40x40/refresh.png" : "../icons/buttons/40x40/refresh_2.png"
-            onTriggered: if (connectedVirtual) getFirstPage().reconnect()
+            iconSource: connectedVirtual && !model.blocking ? "../icons/buttons/40x40/refresh.png" : "../icons/buttons/40x40/refresh_2.png"
+            onTriggered: if (connectedVirtual) controller.reconnect()
         }
         CoverAction {
-            iconSource: connectedVirtual && getFirstPage().transfering ? "../icons/buttons/40x40/cancel.png" : "../icons/buttons/40x40/cancel_2.png"
-            onTriggered: if (connectedVirtual) getFirstPage().stopTransfer()
+            iconSource: connectedVirtual && model.transfering ? "../icons/buttons/40x40/cancel.png" : "../icons/buttons/40x40/cancel_2.png"
+            onTriggered: if (connectedVirtual) controller.stopTransfer()
         }
     }
 
@@ -54,7 +48,7 @@ CoverBackground {
             font.family: Theme.fontFamilyHeading
         }
         Label {
-            text: connectedVirtual ? getFirstPage().connectedHost : "-"
+            text: connectedVirtual ? model.host : "-"
             font.pixelSize: 32
             color: Theme.highlightColor
             font.family: Theme.fontFamily
@@ -68,7 +62,7 @@ CoverBackground {
             font.family: Theme.fontFamilyHeading
         }
         Label {
-            text: connectedVirtual ? getFirstPage().connectedPort : "-"
+            text: connectedVirtual ? model.port : "-"
             font.pixelSize: 32
             color: Theme.highlightColor
             font.family: Theme.fontFamily
@@ -85,7 +79,7 @@ CoverBackground {
 
         wrapMode: Text.Wrap
         horizontalAlignment: Text.AlignHCenter
-        text: connectedVirtual ? getFirstPage().message : qsTr("Not connected")
+        text: connectedVirtual ? model.message : qsTr("Not connected")
         color: "White"
         font.pixelSize: 32
     }

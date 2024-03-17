@@ -2,23 +2,17 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    property bool connectedVirtual: true
-
-    function init(ch, cp) {
-        textArea.startLine = ch + ":" + cp + ">"
-        textArea.length = textArea.startLine.length
-        textArea.text = textArea.startLine
-    }
+    property QtObject model
+    property QtObject controller
 
     objectName: "sshPage"
-    allowedOrientations: Orientation.Portrait
     showNavigationIndicator: false
     backgroundColor: "Black"
 
     TextArea {
         property int length: 1
         property string startLine: ">"
-        property bool blocking: false
+        property bool localBlocking: false
 
         id: textArea
         anchors.fill: parent
@@ -31,7 +25,7 @@ Page {
         wrapMode: TextEdit.WrapAnywhere
         inputMethodHints: Qt.ImhNoAutoUppercase
         text: ">"
-        onCursorPositionChanged: if (!blocking) {
+        onCursorPositionChanged: if (!localBlocking) {
             var pos = cursorPosition
             if (pos >= length) {
                 readOnly = false
@@ -43,21 +37,30 @@ Page {
         }
         onTextChanged: {
             if (text[text.length - 1] === "\n") {
-                blocking = true
+                localBlocking = true
 
-                // код на плюсах
+                if (!model.blocking && text.length !== length + 1)
+                    text += controller.send_request(text.slice(length, text.length - 1)) + "\n"
 
                 text += startLine
                 length = text.length
                 cursorPosition = length
-                blocking = false
+                localBlocking = false
             }
             else if (text[length - 1] !== ">") {
-                blocking = true
+                localBlocking = true
                 text = text.slice(0, length - 1) + ">" + text.slice(length - 1)
                 cursorPosition = length - 1
-                blocking = false
+                localBlocking = false
             }
         }
+    }
+
+    Component.onCompleted: {
+        controller = pageStack.previousPage().controller
+        model = pageStack.previousPage().model
+        textArea.startLine = model.host + ":" + model.port + ">"
+        textArea.length = textArea.startLine.length
+        textArea.text = textArea.startLine
     }
 }

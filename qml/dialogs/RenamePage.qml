@@ -2,22 +2,19 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Dialog {
-    property bool connectedVirtual: true
-
-    property int type: 2
-    property string path: ""
-    property string name: fileDirectoryName.text
+    property QtObject controller
+    property int type: 1
     property bool file: true
+    property string name: fileDirectoryName.text
 
-    function init(t, p, n, f) {
+    function init(t, f, n) {
         type = t
-        path = p
-        fileDirectoryName.text = n
         file = f
+        fileDirectoryName.text = n
+        controller = pageStack.previousPage().controller
     }
 
     objectName: "renamePage"
-    allowedOrientations: Orientation.Portrait
     showNavigationIndicator: false
     canAccept: fileDirectoryName.acceptableInput
 
@@ -37,21 +34,6 @@ Dialog {
             font.family: Theme.fontFamilyHeading
         }
         TextField {
-            function fix() {
-                if (text.length == 0)
-                    label = qsTr("Field is empty")
-                else if (!validate(text))
-                    label = (file ? qsTr("File") : qsTr("Folder")) + " " + qsTr("with the same name already exists")
-                else
-                    label = ""
-            }
-            function validate() {
-                // код на плюсах
-                var answer = true
-
-                return answer
-            }
-
             id: fileDirectoryName
             width: pageContainer.width
             color: "White"
@@ -59,8 +41,15 @@ Dialog {
             label: ""
             hideLabelOnEmptyField: false
             labelVisible: label !== ""
-            acceptableInput: text.length > 0 && validate(text)
-            onTextChanged: fix()
+            acceptableInput: text.length > 0 && controller.validate(type, file, text)
+            onTextChanged: {
+                if (text.length == 0)
+                    label = qsTr("Field is empty")
+                else if (!validate(text))
+                    label = (file ? qsTr("File") : qsTr("Folder")) + " " + qsTr("with the same name already exists")
+                else
+                    label = ""
+            }
         }
     }
 }

@@ -2,18 +2,16 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Dialog {
-    property bool connectedVirtual: true
-
-    property int type: 2
+    property int type: 1
     property string path: ""
-    property string name: ""
     property bool file: true
+    property string name: ""
 
-    function init(t, p, n, f) {
+    function init(t, f, n) {
         type = t
-        path = p
-        name = n
+        path = pageStack.previousPage().model.path[type - 1]
         file = f
+        name = n
         var units = [qsTr("B"), qsTr("Kb"), qsTr("Mb"), qsTr("Gb")]
 
         // код на плюсах
@@ -23,7 +21,6 @@ Dialog {
     }
 
     objectName: "propertiesPage"
-    allowedOrientations: Orientation.Portrait
     showNavigationIndicator: false
     canAccept: false
 
@@ -66,6 +63,23 @@ Dialog {
                 color: "White"
                 readOnly: true
                 text: name
+            }
+        }
+
+        Column {
+            Label {
+                topPadding: 20
+                leftPadding: 30
+                bottomPadding: 15
+                text: qsTr("Path")
+                color: Theme.highlightColor
+                font.family: Theme.fontFamilyHeading
+            }
+            TextField {
+                width: pageContainer.width
+                color: "White"
+                readOnly: true
+                text: path
             }
         }
 

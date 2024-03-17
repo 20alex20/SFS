@@ -3,142 +3,9 @@ import QtGraphicalEffects 1.0
 import Sailfish.Silica 1.0
 
 Column {
-    property bool onCompleted: false
-    QtObject {
-        id: reload
-        function data() {
-            reloadData()
-        }
-    }
-    property var vars: {
-        var page = pageStack.currentPage, p
-        if (page.objectName === "sftpPage")
-            p = page
-        else
-            p = pageStack.previousPage()
-        if (!onCompleted && p !== null) {
-            if (type === 1)
-                p.reload1 = reload
-            else
-                p.reload2 = reload
-            onCompleted = true
-        }
-        return p
-    }
+    property QtObject model
+    property QtObject controller
     property int type: 1
-    property string path: vars !== null ? (type === 1 ? vars.path1 : vars.path2) : ""
-    property bool blockingReloadData: false
-
-    function reloadData() {
-        records.clear()
-        if (path === "")
-            return
-        var arr = []
-        if (path.search("/") !== -1)
-            arr.push({ name: "..", file: false, isChecked: false })
-
-        // код на плюсах
-        arr.push({ name: "amogus.png", file: true, isChecked: false })
-        arr.push({ name: "life", file: false, isChecked: false })
-
-        for (var i = 0; i < arr.length; i++) {
-            records.append(arr[i])
-        }
-    }
-    function selected() {
-        var arr = [], elem, i = Number(records.get(0).name === "..")
-        while (i < records.count) {
-            elem = records.get(i)
-            if (elem.isChecked)
-                arr.push(elem)
-            i++
-        }
-        return arr
-    }
-    function hold(x, y, rect) {
-        if (!vars.blocking) {
-            if (type === 1)
-                vars.children[0].children[1].z = 1
-            row.z = 0
-            rect.z = 2
-            var menuObject
-            if (selected().length === 1)
-                menuObject = largeMenu.createObject(rect)
-            else
-                menuObject = smallMenu.createObject(rect)
-            x = x + menuObject.width > rect.width ? x - menuObject.width : x
-            if (type === 2)
-                y -= menuObject.height
-            menuObject.x = x
-            menuObject.y = y
-            vars.currentElement = rect
-            vars.menuObject = menuObject
-            vars.currentRow = row
-        }
-    }
-
-    function beforeTransfer(mode) {
-        console.log("beforeTransfer")
-        vars.closeMenu()
-        vars.typeElements = type
-        vars.modeElements = mode
-        vars.elements = selected()
-        vars.pathElements = path
-    }
-    function startTransfer(mode) {
-        console.log("startTransfer")
-        vars.closeMenu()
-        vars.blocking = true
-        var arr
-        if (mode !== 5) {
-            if (vars.elements === null) {
-                vars.blocking = false
-                return
-            }
-            arr = vars.elements
-            vars.elements = null
-        }
-        else {
-            arr = selected()
-        }
-
-        // код на плюсах
-        var quantity = 41
-
-        vars.transfering = true
-        for (var num = 0; num < quantity; num++) {
-            if (!vars.transfering) {
-                // код на плюсах
-
-                break
-            }
-            vars.message = qsTr("Processed") + num + " " + qsTr("out of") + " " + quantity
-
-            // код на плюсах
-        }
-        vars.transfering = false
-        vars.message = qsTr("Connected")
-        reloadData()
-        vars.blocking = false
-    }
-    function openDialog(mode) {
-        console.log("openDialog")
-        closeMenu()
-        if (!blocking) {
-            var elem = selected()[0]
-            var dialog = pageStack.push(Qt.resolvedUrl(mode === 6 ? "../dialogs/RenamePage.qml" : "../dialogs/PropertiesPage.qml"))
-            dialog.init(type, path, elem.name, elem.file)
-            if (mode === 6)
-                dialog.accepted.connect(function() {
-                    vars.blocking = true
-
-                    // код на плюсах
-
-                    reloadData()
-                    vars.blocking = false
-                })
-        }
-    }
 
     Row {
         id: row
@@ -164,7 +31,7 @@ Column {
             }
             MouseArea {
                 anchors.fill: parent
-                onPressed: closeMenu()
+                onPressed: controller.closeMenu()
             }
         }
 
@@ -183,17 +50,13 @@ Column {
                 font.family: Theme.fontFamily
                 font.pixelSize: 32
                 text: path
-                onTextChanged: reloadData()
+                onTextChanged: controller.reloadData()
             }
             MouseArea {
                 anchors.fill: parent
-                onPressed: closeMenu()
+                onPressed: controller.closeMenu()
             }
         }
-    }
-
-    ListModel {
-        id: records
     }
 
     ListView {
@@ -201,41 +64,9 @@ Column {
         height: parent.height - parent.children[0].height
         z: 0
         flickDeceleration: Flickable.VerticalFlick
-        onMovementStarted: vars.closeMenu()
-        model: records
+        onMovementStarted: controller.closeMenu()
+        model: model.records[type - 1]
         delegate: Rectangle {
-            function setPressed() {
-                var flag = name === ".."
-                for (var i = 0; i < records.count; i++) {
-                    var elem = records.get(i)
-                    if (elem.isChecked !== flag) {
-                        elem.isChecked = flag
-                        records.set(i, elem)
-                    }
-                }
-                isChecked = true
-            }
-            function setPressed2() {
-                isChecked = !isChecked
-                if (records.get(0).name !== "..")
-                    return
-                var allTrue = true, flag = name === ".."
-                for (var i = 1; i < records.count; i++) {
-                    var elem = records.get(i)
-                    if (flag && elem.isChecked !== isChecked) {
-                        elem.isChecked = isChecked
-                        records.set(i, elem)
-                    }
-                    if (!elem.isChecked)
-                        allTrue = false
-                }
-                elem = records.get(0)
-                elem.isChecked = allTrue
-                records.set(0, elem)
-            }
-
-            property bool localBlocking: false
-
             id: rect
             width: parent.width
             height: 80
@@ -271,26 +102,17 @@ Column {
                 }
                 MouseArea {
                     anchors.fill: parent
-                    onPressed: closeMenu()
-                    onReleased: rect.localBlocking = false
-                    onClicked: if (!rect.localBlocking) rect.setPressed()
+                    onPressed: controller.closeMenu()
+                    onClicked: { controller.setPressed(type); isChecked = true }
                     onPressAndHold: {
-                        if (!isChecked)
-                            rect.setPressed()
-                        localBlocking = true
-                        hold(mouseX, mouseY, rect)
+                        if (!isChecked) {
+                            controller.setPressed(type)
+                            isChecked = true
+                        }
+                        controller.openMenu(type, mouseX, mouseY, row, rect,
+                                            controller.selected().length === 1 ? largeMenu : smallMenu)
                     }
-                    onDoubleClicked: if (!vars.blocking && !file) {
-                        var p
-                        if (name === "..")
-                            p = path.slice(0, path.lastIndexOf("/"))
-                        else
-                            p = path + "/" + name
-                        if (type === 1)
-                            vars.path1 = p
-                        else
-                            vars.path2 = p
-                    }
+                    onDoubleClicked: if (!file) controller.openDirectory(type, name === "..")
                 }
             }
 
@@ -307,14 +129,15 @@ Column {
                     icon.visible = containsPress
                     children[1].visible = !containsPress
                 }
-                onPressed: closeMenu()
-                onReleased: rect.localBlocking = false
-                onClicked: if (!rect.localBlocking) rect.setPressed2()
+                onPressed: controller.closeMenu()
+                onClicked: { isChecked = !isChecked; controller.setPressed2(type) }
                 onPressAndHold: {
-                    if (!isChecked)
-                        rect.setPressed2()
-                    localBlocking = true
-                    hold(mouseX + parent.children[0].width, mouseY, rect)
+                    if (!isChecked) {
+                        isChecked = !isChecked
+                        controller.setPressed2(type)
+                    }
+                    controller.openMenu(type, mouseX + parent.children[0].width, mouseY, row, rect,
+                                        controller.selected().length === 1 ? largeMenu : smallMenu)
                 }
 
                 Image {
@@ -358,7 +181,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: startTransfer(1)
+                                onClicked: controller.startTransfer(type, 1)
                             }
                         }
                         Label {
@@ -374,7 +197,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: beforeTransfer(2)
+                                onClicked: controller.beforeTransfer(type, 2)
                             }
                         }
                         Label {
@@ -390,7 +213,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: beforeTransfer(3)
+                                onClicked: controller.beforeTransfer(type, 3)
                             }
                         }
                         Label {
@@ -406,7 +229,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: startTransfer(4)
+                                onClicked: controller.startTransfer(type, 4)
                             }
                         }
                         Label {
@@ -422,7 +245,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: startTransfer(5)
+                                onClicked: controller.startTransfer(type, 5)
                             }
                         }
                         Label {
@@ -438,7 +261,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: openDialog(6)
+                                onClicked: controller.openDialog(type, 6)
                             }
                         }
                         Label {
@@ -454,7 +277,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: openDialog(7)
+                                onClicked: controller.openDialog(type, 7)
                             }
                         }
 
@@ -516,7 +339,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: startTransfer(1)
+                                onClicked: controller.startTransfer(type, 1)
                             }
                         }
                         Label {
@@ -532,7 +355,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: beforeTransfer(2)
+                                onClicked: controller.beforeTransfer(type, 2)
                             }
                         }
                         Label {
@@ -548,7 +371,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: beforeTransfer(3)
+                                onClicked: controller.beforeTransfer(type, 3)
                             }
                         }
                         Label {
@@ -564,7 +387,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: startTransfer(4)
+                                onClicked: controller.startTransfer(type, 4)
                             }
                         }
                         Label {
@@ -580,7 +403,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: startTransfer(5)
+                                onClicked: controller.startTransfer(type, 5)
                             }
                         }
 

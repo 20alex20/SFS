@@ -2,20 +2,15 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Dialog {
-    property bool connectedVirtual: true
-
-    property int type: 2
-    property string path1: ""
-    property string path2: ""
+    property QtObject controller
+    property int type: 1
     property string name: directoryName.text
 
-    function init(p1, p2) {
-        path1 = p1
-        path2 = p2
+    function init() {
+        controller = pageStack.previousPage().controller
     }
 
     objectName: "addDirectoryPage"
-    allowedOrientations: Orientation.Portrait
     showNavigationIndicator: false
     canAccept: directoryName.acceptableInput
 
@@ -43,13 +38,13 @@ Dialog {
                 valueColor: "White"
                 menu: ContextMenu {
                     MenuItem {
-                        text: qsTr("Remote")
-                    }
-                    MenuItem {
                         text: qsTr("Local")
                     }
+                    MenuItem {
+                        text: qsTr("Remote")
+                    }
 
-                    onActivated: type = index === 0 ? 2 : 1
+                    onActivated: type = index + 1
                     Component.onCompleted: {
                         for(var i = 0; i < children.length; i++)
                             children[i].color = "White"
@@ -68,21 +63,6 @@ Dialog {
                 font.family: Theme.fontFamilyHeading
             }
             TextField {
-                function fix() {
-                    if (text.length == 0)
-                        label = qsTr("Field is empty")
-                    else if (!validate(text))
-                        label = qsTr("A folder with the same name already exists")
-                    else
-                        label = ""
-                }
-                function validate() {
-                    // код на плюсах
-                    var answer = text !== "life"
-
-                    return answer
-                }
-
                 id: directoryName
                 width: pageContainer.width
                 color: "White"
@@ -90,8 +70,15 @@ Dialog {
                 label: ""
                 hideLabelOnEmptyField: false
                 labelVisible: label !== ""
-                acceptableInput: text.length > 0 && validate(text)
-                onTextChanged: fix()
+                acceptableInput: text.length > 0 && controller.validate(type, true, text)
+                onTextChanged: {
+                    if (text.length == 0)
+                        label = qsTr("Field is empty")
+                    else if (!validate(text))
+                        label = qsTr("A folder with the same name already exists")
+                    else
+                        label = ""
+                }
             }
         }
     }

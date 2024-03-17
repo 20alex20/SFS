@@ -48,7 +48,6 @@ SOURCES += \
 HEADERS += \
 
 DISTFILES += \
-    qml/model/Model.qml \
     qml/pages/AddDirectoryPage.qml \
     qml/pages/PropertiesPage.qml \
     qml/pages/RenamePage.qml \

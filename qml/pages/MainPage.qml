@@ -2,10 +2,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    property bool connectedVirtual: false
-
     objectName: "mainPage"
-    allowedOrientations: Orientation.Portrait
 
     Flickable {
         id: flicked
@@ -294,10 +291,13 @@ Page {
                         // код на плюсах
 
                         var page = pageStack.replace(Qt.resolvedUrl("SftpPage.qml"))
-                        page.init(host.text, userName.text, password.text, port.text)
-
+                        var controller = Qt.createQmlObject(Qt.resolvedUrl("../mvc/Controller.qml"), page)
+                        page.controller = controller
+                        var model = Qt.createQmlObject(Qt.resolvedUrl("../mvc/Model.qml"), page)
+                        model.init(host.text, userName.text, password.text, port.text)
+                        page.model = model
+                        controller.model = model
                         pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
-                        pageStack.nextPage().init(host.text, port.text)
                     }
                     else {
                         host.readOnly = true
