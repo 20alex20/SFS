@@ -2,11 +2,11 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 CoverBackground {
-    property QtObject model: connectedVirtual ? pageStack.currentPage.model : null
-    property QtObject controller: connectedVirtual ? pageStack.currentPage.controller : null
+    property var model: connectedVirtual ? pageStack.currentPage.model : null
+    property var controller: connectedVirtual ? pageStack.currentPage.controller : null
     property bool connectedVirtual: pageStack.currentPage.objectName !== "mainPage"
 
-    objectName: "defaultCover"
+    objectName: "сover"
 
     CoverActionList {
         CoverAction {

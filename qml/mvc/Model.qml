@@ -8,7 +8,6 @@ QtObject {
         port = p
     }
 
-    id: main_model
 
     property bool blocking: false
     property bool transfering: false

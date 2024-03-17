@@ -3,7 +3,6 @@ import QtQuick 2.0
 QtObject {
     property QtObject model
 
-    id: main_controller
 
     // контроллер модели
     function disconnect() {
@@ -26,8 +25,8 @@ QtObject {
             // код на плюсах
             model.path[1] = "C:/Users/Alex/AuroraIDEProjects/SFS/qml"
 
+            reloadData(type)
             pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
-            pageStack.nextPage()
             model.message = qsTr("Connected")
             model.blocking = false
         }
@@ -48,10 +47,7 @@ QtObject {
                 var path = model.path[dialog.type - 1]
                 // код на плюсах
 
-                if (dialog.type === 1)
-                    model.reload1.data()
-                else
-                    model.reload2.data()
+                reloadData(dialog.type)
                 model.blocking = false
             })
         }
@@ -59,6 +55,8 @@ QtObject {
     function reboot(type) {
         // код на плюсах
         model.path[type - 1] = "C:/Users/Alex/AuroraIDEProjects/SFS/qml/pages"
+
+        reloadData(type)
     }
 
     function reloadData(type) {
@@ -113,8 +111,8 @@ QtObject {
             // код на плюсах
         }
         model.transfering = false
-        model.message = qsTr("Connected")
         reloadData()
+        model.message = qsTr("Connected")
         model.blocking = false
     }
     function openDialog(type, mode) {
@@ -139,6 +137,10 @@ QtObject {
                 model.path[type - 1] = model.path[type - 1].slice(0, model.path[type - 1].lastIndexOf("/"))
             else
                 model.path[type - 1] = path + "/" + name
+
+            // код на плюсах
+
+            reloadData(type)
         }
     }
 
@@ -153,8 +155,11 @@ QtObject {
 
     function send_request(request) {
         // код на плюсах
-        return request
+        var answer = request
+
+        return answer
     }
+
 
     // контроллер представлений
     function closeMenu() {
@@ -197,9 +202,8 @@ QtObject {
             vars.menuObject = menuObject
         }
     }
-    function setPressed(type) {
+    function setPressed(type, flag) {
         var records = model.records[type - 1]
-        var flag = name === ".."
         for (var i = 0; i < records.count; i++) {
             var elem = records.get(i)
             if (elem.isChecked !== flag) {
@@ -208,11 +212,11 @@ QtObject {
             }
         }
     }
-    function setPressed2(type) {
+    function setPressed2(type, flag) {
         var records = model.records[type - 1]
         if (records.get(0).name !== "..")
             return
-        var allTrue = true, flag = name === ".."
+        var allTrue = true
         for (var i = 1; i < records.count; i++) {
             var elem = records.get(i)
             if (flag) {

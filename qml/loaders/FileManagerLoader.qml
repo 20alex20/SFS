@@ -50,7 +50,6 @@ Column {
                 font.family: Theme.fontFamily
                 font.pixelSize: 32
                 text: path
-                onTextChanged: controller.reloadData()
             }
             MouseArea {
                 anchors.fill: parent
@@ -103,10 +102,10 @@ Column {
                 MouseArea {
                     anchors.fill: parent
                     onPressed: controller.closeMenu()
-                    onClicked: { controller.setPressed(type); isChecked = true }
+                    onClicked: { controller.setPressed(type, name === ".."); isChecked = true }
                     onPressAndHold: {
                         if (!isChecked) {
-                            controller.setPressed(type)
+                            controller.setPressed(type, name === "..")
                             isChecked = true
                         }
                         controller.openMenu(type, mouseX, mouseY, row, rect,
@@ -130,11 +129,11 @@ Column {
                     children[1].visible = !containsPress
                 }
                 onPressed: controller.closeMenu()
-                onClicked: { isChecked = !isChecked; controller.setPressed2(type) }
+                onClicked: { isChecked = !isChecked; controller.setPressed2(type,name === "..") }
                 onPressAndHold: {
                     if (!isChecked) {
                         isChecked = !isChecked
-                        controller.setPressed2(type)
+                        controller.setPressed2(type, name === "..")
                     }
                     controller.openMenu(type, mouseX + parent.children[0].width, mouseY, row, rect,
                                         controller.selected().length === 1 ? largeMenu : smallMenu)
