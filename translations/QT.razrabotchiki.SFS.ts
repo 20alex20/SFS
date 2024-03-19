@@ -39,73 +39,73 @@
     <message>
         <location filename="../qml/mvc/Controller.qml" line="17"/>
         <source>Disconnection</source>
-        <translation type="unfinished">Disconnection</translation>
+        <translation>Disconnection</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="28"/>
         <source>Reconnection</source>
-        <translation type="unfinished">Reconnection</translation>
+        <translation>Reconnection</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="36"/>
         <location filename="../qml/mvc/Controller.qml" line="127"/>
         <source>Connected</source>
-        <translation type="unfinished">Connected</translation>
+        <translation>Connected</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="42"/>
         <source>Canceling the operation</source>
-        <translation type="unfinished">Canceling the operation</translation>
+        <translation>Canceling the operation</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="121"/>
         <source>Processed</source>
-        <translation type="unfinished">Processed</translation>
+        <translation>Processed</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="121"/>
         <source>out of</source>
-        <translation type="unfinished">out of</translation>
+        <translation>out of</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="182"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="182"/>
         <source>Kb</source>
-        <translation type="unfinished">Kb</translation>
+        <translation>Kb</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="182"/>
         <source>Mb</source>
-        <translation type="unfinished">Mb</translation>
+        <translation>Mb</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="182"/>
         <source>Gb</source>
-        <translation type="unfinished">Gb</translation>
+        <translation>Gb</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="253"/>
         <source>Field is empty</source>
-        <translation type="unfinished">Field is empty</translation>
+        <translation>Field is empty</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="255"/>
         <source>File</source>
-        <translation type="unfinished">File</translation>
+        <translation>File</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="255"/>
         <source>Folder</source>
-        <translation type="unfinished">Folder</translation>
+        <translation>Folder</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="255"/>
         <source>with the same name already exists</source>
-        <translation type="unfinished">with the same name already exists</translation>
+        <translation>with the same name already exists</translation>
     </message>
 </context>
 <context>
@@ -113,17 +113,17 @@
     <message>
         <location filename="../qml/cover/Cover.qml" line="54"/>
         <source>Host:</source>
-        <translation type="unfinished">Host:</translation>
+        <translation>Host:</translation>
     </message>
     <message>
         <location filename="../qml/cover/Cover.qml" line="68"/>
         <source>Port:</source>
-        <translation type="unfinished">Port:</translation>
+        <translation>Port:</translation>
     </message>
     <message>
         <location filename="../qml/cover/Cover.qml" line="92"/>
         <source>Not connected</source>
-        <translation type="unfinished">Not connected</translation>
+        <translation>Not connected</translation>
     </message>
 </context>
 <context>
@@ -248,7 +248,7 @@
     <message>
         <location filename="../qml/mvc/Model.qml" line="22"/>
         <source>Connected</source>
-        <translation type="unfinished">Connected</translation>
+        <translation>Connected</translation>
     </message>
 </context>
 <context>
@@ -281,7 +281,7 @@
     <message>
         <location filename="../qml/dialogs/PropertiesPage.qml" line="74"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Path</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/PropertiesPage.qml" line="92"/>

@@ -39,73 +39,73 @@
     <message>
         <location filename="../qml/mvc/Controller.qml" line="17"/>
         <source>Disconnection</source>
-        <translation type="unfinished">Отключение</translation>
+        <translation>Отключение</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="28"/>
         <source>Reconnection</source>
-        <translation type="unfinished">Переподключение</translation>
+        <translation>Переподключение</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="36"/>
         <location filename="../qml/mvc/Controller.qml" line="127"/>
         <source>Connected</source>
-        <translation type="unfinished">Подключено</translation>
+        <translation>Подключено</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="42"/>
         <source>Canceling the operation</source>
-        <translation type="unfinished">Отмена операции</translation>
+        <translation>Отмена операции</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="121"/>
         <source>Processed</source>
-        <translation type="unfinished">Обработано</translation>
+        <translation>Обработано</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="121"/>
         <source>out of</source>
-        <translation type="unfinished">из</translation>
+        <translation>из</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="182"/>
         <source>B</source>
-        <translation type="unfinished">Б</translation>
+        <translation>Б</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="182"/>
         <source>Kb</source>
-        <translation type="unfinished">Кб</translation>
+        <translation>Кб</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="182"/>
         <source>Mb</source>
-        <translation type="unfinished">Мб</translation>
+        <translation>Мб</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="182"/>
         <source>Gb</source>
-        <translation type="unfinished">Гб</translation>
+        <translation>Гб</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="253"/>
         <source>Field is empty</source>
-        <translation type="unfinished">Поле не заполненно</translation>
+        <translation>Поле не заполненно</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="255"/>
         <source>File</source>
-        <translation type="unfinished">Файл</translation>
+        <translation>Файл</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="255"/>
         <source>Folder</source>
-        <translation type="unfinished">Папка</translation>
+        <translation>Папка</translation>
     </message>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="255"/>
         <source>with the same name already exists</source>
-        <translation type="unfinished">с таким именем уже существует</translation>
+        <translation>с таким именем уже существует</translation>
     </message>
 </context>
 <context>
@@ -113,17 +113,17 @@
     <message>
         <location filename="../qml/cover/Cover.qml" line="54"/>
         <source>Host:</source>
-        <translation type="unfinished">Хост:</translation>
+        <translation>Хост:</translation>
     </message>
     <message>
         <location filename="../qml/cover/Cover.qml" line="68"/>
         <source>Port:</source>
-        <translation type="unfinished">Порт:</translation>
+        <translation>Порт:</translation>
     </message>
     <message>
         <location filename="../qml/cover/Cover.qml" line="92"/>
         <source>Not connected</source>
-        <translation type="unfinished">Не подключено</translation>
+        <translation>Не подключено</translation>
     </message>
 </context>
 <context>
@@ -248,7 +248,7 @@
     <message>
         <location filename="../qml/mvc/Model.qml" line="22"/>
         <source>Connected</source>
-        <translation type="unfinished">Подключено</translation>
+        <translation>Подключено</translation>
     </message>
 </context>
 <context>
@@ -281,7 +281,7 @@
     <message>
         <location filename="../qml/dialogs/PropertiesPage.qml" line="74"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Путь</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/PropertiesPage.qml" line="92"/>
