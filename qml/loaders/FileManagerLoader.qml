@@ -4,20 +4,26 @@ import Sailfish.Silica 1.0
 
 Column {
     ListModel { id: records }
-    QtObject {
-        id: defaultModel
-
-        property var path: [""]
-        property var records: [records]
-    }
-    property QtObject mainModel: defaultModel
-    property QtObject controller
+    QtObject { id: defaultModel; property var path: ["", ""]; property var records: [records, records] }
+    property QtObject model: defaultModel
+    property QtObject сontroller
     property int type: 1
+
+    function init(m, c, t) {
+        c.initialize(t)
+        model = m
+        сontroller = c
+        type = t
+    }
+
+    function onDestruction() {
+        model = defaultModel
+    }
+
 
     Row {
         id: row
         width: parent.width
-        z: 1
 
         Rectangle {
             color: Theme.highlightBackgroundColor
@@ -38,7 +44,7 @@ Column {
             }
             MouseArea {
                 anchors.fill: parent
-                onPressed: controller.closeMenu()
+                onPressed: сontroller.closeMenu()
             }
         }
 
@@ -56,22 +62,23 @@ Column {
                 color: "Black"
                 font.family: Theme.fontFamily
                 font.pixelSize: 32
-                text: mainModel.path[type - 1]
+                text: model.path[type - 1]
             }
             MouseArea {
                 anchors.fill: parent
-                onPressed: controller.closeMenu()
+                onPressed: сontroller.closeMenu()
             }
         }
     }
 
     ListView {
+        id: listView
         width: parent.width
         height: parent.height - parent.children[0].height
-        z: 0
+        clip: true
         flickDeceleration: Flickable.VerticalFlick
-        onMovementStarted: controller.closeMenu()
-        model: mainModel.records[type - 1]
+        onMovementStarted: сontroller.closeMenu()
+        model: parent.model.records[type - 1]
         delegate: Rectangle {
             id: rect
             width: parent.width
@@ -108,17 +115,17 @@ Column {
                 }
                 MouseArea {
                     anchors.fill: parent
-                    onPressed: controller.closeMenu()
-                    onClicked: { controller.setPressed(type, name === ".."); isChecked = true }
+                    onPressed: сontroller.closeMenu()
+                    onClicked: { сontroller.setPressed(type, name === ".."); isChecked = true }
                     onPressAndHold: {
                         if (!isChecked) {
-                            controller.setPressed(type, name === "..")
+                            сontroller.setPressed(type, name === "..")
                             isChecked = true
                         }
-                        controller.openMenu(type, mouseX, mouseY, row, rect,
-                                            controller.selected().length === 1 ? largeMenu : smallMenu)
+                        сontroller.openMenu(type, mouseX, mouseY, row, listView, rect,
+                                            сontroller.selected(type).length === 1 ? largeMenu : smallMenu)
                     }
-                    onDoubleClicked: if (!file) controller.openDirectory(type, name === "..")
+                    onDoubleClicked: if (!file) сontroller.openDirectory(type, name)
                 }
             }
 
@@ -135,15 +142,15 @@ Column {
                     icon.visible = containsPress
                     children[1].visible = !containsPress
                 }
-                onPressed: controller.closeMenu()
-                onClicked: { isChecked = !isChecked; controller.setPressed2(type,name === "..") }
+                onPressed: сontroller.closeMenu()
+                onClicked: { isChecked = !isChecked; сontroller.setPressed2(type, name === "..", isChecked) }
                 onPressAndHold: {
                     if (!isChecked) {
                         isChecked = !isChecked
-                        controller.setPressed2(type, name === "..")
+                        сontroller.setPressed2(type, name === "..", isChecked)
                     }
-                    controller.openMenu(type, mouseX + parent.children[0].width, mouseY, row, rect,
-                                        controller.selected().length === 1 ? largeMenu : smallMenu)
+                    сontroller.openMenu(type, mouseX + parent.children[0].width, mouseY, row, listView, rect,
+                                        сontroller.selected(type).length === 1 ? largeMenu : smallMenu)
                 }
 
                 Image {
@@ -187,7 +194,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.startTransfer(type, 1)
+                                onClicked: сontroller.startTransfer(type, 1)
                             }
                         }
                         Label {
@@ -203,7 +210,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.beforeTransfer(type, 2)
+                                onClicked: сontroller.beforeTransfer(type, 2)
                             }
                         }
                         Label {
@@ -219,7 +226,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.beforeTransfer(type, 3)
+                                onClicked: сontroller.beforeTransfer(type, 3)
                             }
                         }
                         Label {
@@ -235,7 +242,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.startTransfer(type, 4)
+                                onClicked: сontroller.startTransfer(type, 4)
                             }
                         }
                         Label {
@@ -251,7 +258,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.startTransfer(type, 5)
+                                onClicked: сontroller.startTransfer(type, 5)
                             }
                         }
                         Label {
@@ -267,7 +274,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.openDialog(type, 6)
+                                onClicked: сontroller.openDialog(type, 6)
                             }
                         }
                         Label {
@@ -283,7 +290,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.openDialog(type, 7)
+                                onClicked: сontroller.openDialog(type, 7)
                             }
                         }
 
@@ -345,7 +352,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.startTransfer(type, 1)
+                                onClicked: сontroller.startTransfer(type, 1)
                             }
                         }
                         Label {
@@ -361,7 +368,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.beforeTransfer(type, 2)
+                                onClicked: сontroller.beforeTransfer(type, 2)
                             }
                         }
                         Label {
@@ -377,7 +384,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.beforeTransfer(type, 3)
+                                onClicked: сontroller.beforeTransfer(type, 3)
                             }
                         }
                         Label {
@@ -393,7 +400,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.startTransfer(type, 4)
+                                onClicked: сontroller.startTransfer(type, 4)
                             }
                         }
                         Label {
@@ -409,7 +416,7 @@ Column {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: controller.startTransfer(type, 5)
+                                onClicked: сontroller.startTransfer(type, 5)
                             }
                         }
 

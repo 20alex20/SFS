@@ -2,9 +2,15 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
+    property bool connectedVirtual: false
+
     objectName: "mainPage"
 
     Flickable {
+        function activateFlick() {
+            flickableDirection = Flickable.VerticalFlick
+        }
+
         id: flicked
         anchors.fill: parent
         onMovementStarted: {
@@ -130,8 +136,9 @@ Page {
                     labelVisible: label !== ""
                     acceptableInput: blocking || (text.length > 0 && validate.test(text))
                     onFocusChanged: {
-                        if (focus)
-                            flicked.flickableDirection = Flickable.VerticalFlick
+                        if (focus) {
+                            activateFlick()
+                        }
                         else {
                             getMessage()
                             blocking = false
@@ -168,8 +175,9 @@ Page {
                     labelVisible: false
                     acceptableInput: blocking || text.length > 0
                     onFocusChanged: {
-                        if (focus)
-                            flicked.flickableDirection = Flickable.VerticalFlick
+                        if (focus) {
+                            activateFlick()
+                        }
                         else {
                             getMessage()
                             blocking = false
@@ -207,8 +215,9 @@ Page {
                     labelVisible: false
                     acceptableInput: blocking || text.length > 0
                     onFocusChanged: {
-                        if (focus)
-                            flicked.flickableDirection = Flickable.VerticalFlick
+                        if (focus) {
+                            activateFlick()
+                        }
                         else {
                             getMessage()
                             blocking = false
@@ -259,8 +268,9 @@ Page {
                     labelVisible: label !== ""
                     acceptableInput: blocking || (text.length > 0 && validate(text))
                     onFocusChanged: {
-                        if (focus)
-                            flicked.flickableDirection = Flickable.VerticalFlick
+                        if (focus) {
+                            activateFlick()
+                        }
                         else {
                             getMessage()
                             blocking = false
@@ -291,14 +301,7 @@ Page {
                         // код на плюсах
 
                         var page = pageStack.replace(Qt.resolvedUrl("SftpPage.qml"))
-                        var model = Qt.createComponent("../mvc/Model.qml").createObject(page)
-                        model.init(host.text, userName.text, password.text, port.text)
-                        var controller = Qt.createComponent("../mvc/Controller.qml").createObject(page)
-                        controller.init(model)
-                        page.init(model, controller)
-
-                        page = pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
-                        page.init(model, controller)
+                        page.init(host.text, userName.text, password.text, port.text)
                     }
                     else {
                         host.readOnly = true

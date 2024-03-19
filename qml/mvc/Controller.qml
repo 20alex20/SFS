@@ -7,6 +7,8 @@ QtObject {
         model = m
     }
 
+    id: controller
+
 
     // контроллер представлений с взаимодействием с бинес-логикой на C++
     function disconnect() {
@@ -16,8 +18,8 @@ QtObject {
 
             // код на плюсах
 
-            pageStack.replaceAbove(null, Qt.resolvedUrl("MainPage.qml"))
-            model.blocking = false
+            model.destroy()
+            pageStack.replaceAbove(null, Qt.resolvedUrl("../pages/MainPage.qml"))
         }
     }
     function reconnect() {
@@ -29,8 +31,8 @@ QtObject {
             // код на плюсах
             model.path[1] = "C:/Users/Alex/AuroraIDEProjects/SFS/qml"
 
-            reloadData(type)
-            pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml"))
+            reloadData(2)
+            pageStack.pushAttached(Qt.resolvedUrl("../pages/SshPage.qml")).init(model, controller)
             model.message = qsTr("Connected")
             model.blocking = false
         }
@@ -44,7 +46,7 @@ QtObject {
     function addDirectory() {
         if (!model.blocking) {
             var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/AddDirectoryPage.qml"))
-            dialog.init()
+            dialog.init(controller)
             dialog.accepted.connect(function() {
                 model.blocking = true
 
@@ -64,40 +66,46 @@ QtObject {
         reloadData(type)
     }
     function reloadData(type) {
-        model.records[type].clear()
+        model.records[type - 1].clear()
         var arr = []
-        if (model.path[type].search("/") !== -1)
+        if (model.path[type - 1].search("/") !== -1)
             arr.push({ name: "..", file: false, isChecked: false })
 
         // код на плюсах
-        arr.push({ name: "amogus.png", file: true, isChecked: false })
+        arr.push({ name: "amogus0.png", file: true, isChecked: false })
+        arr.push({ name: "amogus1.png", file: true, isChecked: false })
         arr.push({ name: "life", file: false, isChecked: false })
+        arr.push({ name: "amogus2.png", file: true, isChecked: false })
+        arr.push({ name: "amogus3.png", file: true, isChecked: false })
+        arr.push({ name: "aurora", file: false, isChecked: false })
+        arr.push({ name: "amogus4.png", file: true, isChecked: false })
+        arr.push({ name: "amogus5.png", file: true, isChecked: false })
 
         for (var i = 0; i < arr.length; i++) {
-            model.records[type].append(arr[i])
+            model.records[type - 1].append(arr[i])
         }
     }
     function beforeTransfer(type, mode) {
-        model.closeMenu()
+        closeMenu()
         model.typeElements = type
         model.modeElements = mode
         model.pathElements = model.path[type - 1]
-        model.elements = selected()
+        model.elements = selected(type)
     }
     function startTransfer(type, mode) {
-        model.closeMenu()
+        closeMenu()
         model.blocking = true
         var arr
         if (mode !== 5) {
-            if (model.elements === null) {
+            if (model.elements.length === 0) {
                 model.blocking = false
                 return
             }
             arr = model.elements
-            model.elements = null
+            model.elements = []
         }
         else {
-            arr = selected()
+            arr = selected(type)
         }
 
         // код на плюсах
@@ -115,15 +123,15 @@ QtObject {
             // код на плюсах
         }
         model.transfering = false
-        reloadData()
+        reloadData(type)
         model.message = qsTr("Connected")
         model.blocking = false
     }
     function openDialog(type, mode) {
         closeMenu()
-        var elem = selected()[0]
+        var elem = selected(type)[0]
         var dialog = pageStack.push(Qt.resolvedUrl(mode === 6 ? "../dialogs/RenamePage.qml" : "../dialogs/PropertiesPage.qml"))
-        dialog.init(type, elem.file, elem.name)
+        dialog.init(controller, type, elem.file, elem.name)
         if (mode === 6)
             dialog.accepted.connect(function() {
                 model.blocking = true
@@ -131,31 +139,25 @@ QtObject {
                 var path = model.path[type - 1]
                 // код на плюсах
 
-                reloadData()
+                reloadData(type)
                 model.blocking = false
             })
     }
-    function openDirectory(type, flag) {
+    function openDirectory(type, name) {
         if (!model.blocking) {
-            if (flag)
-                model.path[type - 1] = model.path[type - 1].slice(0, model.path[type - 1].lastIndexOf("/"))
+            var path = model.path
+            if (name === "..")
+                path[type - 1] = model.path[type - 1].slice(0, model.path[type - 1].lastIndexOf("/"))
             else
-                model.path[type - 1] = path + "/" + name
+                path[type - 1] = model.path[type - 1] + "/" + name
 
             // код на плюсах
 
+            model.path = path
             reloadData(type)
         }
     }
 
-    function validate(type, file, text) {
-        var path = model.path[type - 1]
-
-        // код на плюсах
-        var answer = !file || text !== "life"
-
-        return answer
-    }
     function sendRequest(request) {
         // код на плюсах
         var answer = request
@@ -163,36 +165,49 @@ QtObject {
         return answer
     }
 
+    function validate(type, file, text, lastName) {
+        var path = model.path[type - 1]
+
+        // код на плюсах
+
+        var answer = (lastName === text) ||
+                (!file && text !== "life" && text !== "aurora") ||
+                (file && text !== "amogus0.png" && text !== "amogus1.png" &&
+                 text !== "amogus2.png" && text !== "amogus3.png" &&
+                 text !== "amogus4.png" && text !== "amogus5.png")
+
+        return answer
+    }
+    function getInfo(type, file, text) {
+        var units = [qsTr("B"), qsTr("Kb"), qsTr("Mb"), qsTr("Gb")]
+        var path = model.path[type - 1]
+
+        // код на плюсах
+        var answer = [path, "12.02.2024", "12" + " " + units[2]]
+
+        return answer
+    }
 
     // контроллер представлений, не требующий взаимодействия с бизнес-логикой
-    function openMenu(type, x, y, row, rect, menu) {
+    function openMenu(type, x, y, row, listView, rect, menu) {
         if (!model.blocking) {
-            if (type === 1)
-                model.loader1Z = 1
-            row.z = 0
-            rect.z = 2
-
-            var menuObject = menu.createObject(rect)
+            var menuObject = menu.createObject(model.sftpPageObject)
             x = x + menuObject.width > rect.width ? x - menuObject.width : x
+            y += rect.y + row.height + model.sftpPageObject.children[0].children[type].y - listView.contentY
             if (type === 2)
                 y -= menuObject.height
+
             menuObject.x = x
             menuObject.y = y
-
-            vars.currentRow = row
-            vars.currentRect = rect
-            vars.menuObject = menuObject
+            model.menuObject = menuObject
         }
     }
     function closeMenu() {
         if (model.menuObject !== null) {
             model.menuObject.destroy()
             model.menuObject = null
-            model.currentRect.z = 0
-            model.currentRow.z = 1
-            model.loader1Z = 0
         }
-    }
+    }    
     function selected(type) {
         var records = model.records[type - 1]
         var arr = [], elem, i = Number(records.get(0).name === "..")
@@ -214,14 +229,14 @@ QtObject {
             }
         }
     }
-    function setPressed2(type, flag) {
+    function setPressed2(type, flag, isChecked) {
         var records = model.records[type - 1]
         if (records.get(0).name !== "..")
             return
         var allTrue = true
         for (var i = 1; i < records.count; i++) {
             var elem = records.get(i)
-            if (flag) {
+            if (flag && elem.isChecked !== isChecked) {
                 elem.isChecked = isChecked
                 records.set(i, elem)
             }
@@ -231,5 +246,14 @@ QtObject {
         elem = records.get(0)
         elem.isChecked = allTrue
         records.set(0, elem)
+    }
+
+    function getLabel(type, file, text, lastName) {
+        if (text.length === 0)
+            return qsTr("Field is empty")
+        else if (!validate(type, file, text, lastName))
+            return (file ? qsTr("File") : qsTr("Folder")) + " " + qsTr("with the same name already exists")
+        else
+            return ""
     }
 }

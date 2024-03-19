@@ -1,12 +1,20 @@
 import QtQuick 2.0
 
 Item {
-    function init(h, un, pw, p) {
+    property var onDestruction
+
+    function init(h, un, pw, p, od, spo) {
         host = h
         userName = un
         password = pw
         port = p
+
+        onDestruction = od
+
+        sftpPageObject = spo
     }
+
+    Component.onDestruction: onDestruction()
 
 
     property bool blocking: false
@@ -26,10 +34,8 @@ Item {
     property int typeElements: 1
     property int modeElements: 1
     property string pathElements: ""
-    property var elements: null
+    property var elements: []
 
-    property int loader1Z: 0
-    property var currentRow: null
-    property var currentRect: null
-    property var menuObject: null
+    property QtObject sftpPageObject: null
+    property QtObject menuObject: null
 }

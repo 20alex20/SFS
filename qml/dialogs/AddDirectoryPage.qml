@@ -2,12 +2,14 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Dialog {
+    property bool connectedVirtual: true
     property QtObject controller
     property int type: 1
+    readonly property bool file: false
     property string name: directoryName.text
 
-    function init() {
-        controller = pageStack.previousPage().controller
+    function init(c) {
+        controller = c
     }
 
     objectName: "addDirectoryPage"
@@ -70,15 +72,8 @@ Dialog {
                 label: ""
                 hideLabelOnEmptyField: false
                 labelVisible: label !== ""
-                acceptableInput: text.length > 0 && controller.validate(type, true, text)
-                onTextChanged: {
-                    if (text.length == 0)
-                        label = qsTr("Field is empty")
-                    else if (!validate(text))
-                        label = qsTr("A folder with the same name already exists")
-                    else
-                        label = ""
-                }
+                acceptableInput: text.length > 0 && controller.validate(type, file, text, "")
+                onTextChanged: label = controller.getLabel(type, file, text, "")
             }
         }
     }

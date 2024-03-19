@@ -2,6 +2,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
+    property bool connectedVirtual: false
     QtObject {
         id: defaultModel
 
@@ -9,20 +10,29 @@ Page {
         property string host: ""
         property string port: ""
         property string message: ""
-        property int loader1Z: 0
     }
     property QtObject model: defaultModel
     property QtObject controller
 
-    function init(m, c) {
-        model = m
-        controller = c
-        loader1.setSource("../loaders/FileManagerLoader.qml", { "type": 1, "mainModel": model, "controller": controller })
-        // controller.initialize(1)
-        loader2.setSource("../loaders/FileManagerLoader.qml", { "type": 2, "mainModel": model, "controller": controller })
-        // controller.initialize(2)
+    function init(t, un, pw, p) {
+        model = Qt.createComponent("../mvc/Model.qml").createObject()
+        model.init(t, un, pw, p, function() {
+            model = defaultModel
+            controller.destroy()
+            loader1.item.onDestruction()
+            loader2.item.onDestruction()
+            connectedVirtual = false
+        }, sftpPageObject)
+        controller = Qt.createComponent("../mvc/Controller.qml").createObject()
+        controller.model = model
+
+        connectedVirtual = true
+        loader1.setSource("../loaders/FileManagerLoader.qml")
+        loader2.setSource("../loaders/FileManagerLoader.qml")
+        pageStack.pushAttached(Qt.resolvedUrl("SshPage.qml")).init(model, controller)
     }
 
+    id: sftpPageObject
     objectName: "sftpPage"
     allowedOrientations: Orientation.Portrait
     showNavigationIndicator: false
@@ -113,11 +123,11 @@ Page {
                 IconButton {
                     width: 100
                     height: 100
-                    icon.source: !model.blocking ? "../icons/buttons/70x70/cancel.png" : "../icons/buttons/70x70/cancel_2.png"
+                    icon.source: model.transfering ? "../icons/buttons/70x70/cancel.png" : "../icons/buttons/70x70/cancel_2.png"
                     icon.width: 70
                     icon.height: 70
                     icon.visible: false
-                    onContainsPressChanged: if (!model.blocking) {
+                    onContainsPressChanged: if (model.transfering) {
                         icon.visible = containsPress
                         children[1].visible = !containsPress
                     }
@@ -135,7 +145,7 @@ Page {
                 IconButton {
                     width: 100
                     height: 100
-                    icon.source: !model.blocking ? "../icons/buttons/70x70/add_directory.png" : "../icons/buttons/70x70/add_directory.png"
+                    icon.source: !model.blocking ? "../icons/buttons/70x70/add_directory.png" : "../icons/buttons/70x70/add_directory_2.png"
                     icon.width: 70
                     icon.height: 70
                     icon.visible: false
@@ -160,14 +170,14 @@ Page {
             id: loader1
             width: parent.width
             height: (parent.height - parent.children[0].height) / 2
-            z: model.loader1Z
+            onLoaded: item.init(model, controller, 1)
         }
 
         Loader {
             id: loader2
             width: parent.width
             height: parent.height - parent.children[0].height - parent.children[1].height
-            z: 0
+            onLoaded: item.init(model, controller, 2)
         }
     }
 }

@@ -2,22 +2,22 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Dialog {
+    property bool connectedVirtual: true
+    property QtObject controller
     property int type: 1
-    property string path: ""
     property bool file: true
     property string name: ""
 
-    function init(t, f, n) {
+    function init(c, t, f, n) {
+        controller = c
         type = t
-        path = pageStack.previousPage().model.path[type - 1]
         file = f
         name = n
-        var units = [qsTr("B"), qsTr("Kb"), qsTr("Mb"), qsTr("Gb")]
 
-        // код на плюсах
-        dateTime.text = "12.02.2024"
-
-        size.text = "12" + " " + units[2]
+        var answer = controller.getInfo(type, file, name)
+        path.text = answer[0]
+        dateTime.text = answer[1]
+        size.text = answer[2]
     }
 
     objectName: "propertiesPage"
@@ -76,10 +76,11 @@ Dialog {
                 font.family: Theme.fontFamilyHeading
             }
             TextField {
+                id: path
                 width: pageContainer.width
+                wrapMode: TextInput.WordWrap
                 color: "White"
                 readOnly: true
-                text: path
             }
         }
 

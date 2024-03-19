@@ -2,6 +2,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
+    property bool connectedVirtual: true
     property QtObject model
     property QtObject controller
 
@@ -43,7 +44,7 @@ Page {
                 readOnly = true
             }
         }
-        onTextChanged: {
+        onTextChanged: if (!localBlocking) {
             if (text[text.length - 1] === "\n") {
                 localBlocking = true
 
