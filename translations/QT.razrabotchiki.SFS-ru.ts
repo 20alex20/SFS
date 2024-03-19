@@ -35,6 +35,64 @@
     </message>
 </context>
 <context>
+    <name>ConnectionPage</name>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="35"/>
+        <source>Connection</source>
+        <translation>Соединение</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="44"/>
+        <location filename="../qml/pages/ConnectionPage.qml" line="89"/>
+        <source>New</source>
+        <translation>Новое</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="112"/>
+        <source>Host</source>
+        <translation>Хост</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="122"/>
+        <location filename="../qml/pages/ConnectionPage.qml" line="173"/>
+        <location filename="../qml/pages/ConnectionPage.qml" line="213"/>
+        <location filename="../qml/pages/ConnectionPage.qml" line="246"/>
+        <source>Field is empty</source>
+        <translation>Поле не заполненно</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="124"/>
+        <location filename="../qml/pages/ConnectionPage.qml" line="248"/>
+        <source>The field is filled in incorrectly</source>
+        <translation>Поле заполненно не верно</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="133"/>
+        <source>IP-address</source>
+        <translation>IP-адрес</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="158"/>
+        <source>User name</source>
+        <translation>Имя пользователя</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="197"/>
+        <source>Password</source>
+        <translation>Пароль</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="237"/>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="289"/>
+        <source>Connect</source>
+        <translation>Подключиться</translation>
+    </message>
+</context>
+<context>
     <name>Controller</name>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="17"/>
@@ -183,64 +241,6 @@
         <location filename="../qml/loaders/FileManagerLoader.qml" line="289"/>
         <source>Properties</source>
         <translation>Свойства</translation>
-    </message>
-</context>
-<context>
-    <name>MainPage</name>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="35"/>
-        <source>Connection</source>
-        <translation>Соединение</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="44"/>
-        <location filename="../qml/pages/MainPage.qml" line="89"/>
-        <source>New</source>
-        <translation>Новое</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="112"/>
-        <source>Host</source>
-        <translation>Хост</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="133"/>
-        <source>IP-address</source>
-        <translation>IP-адрес</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="122"/>
-        <location filename="../qml/pages/MainPage.qml" line="173"/>
-        <location filename="../qml/pages/MainPage.qml" line="213"/>
-        <location filename="../qml/pages/MainPage.qml" line="246"/>
-        <source>Field is empty</source>
-        <translation>Поле не заполненно</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="124"/>
-        <location filename="../qml/pages/MainPage.qml" line="248"/>
-        <source>The field is filled in incorrectly</source>
-        <translation>Поле заполненно не верно</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="158"/>
-        <source>User name</source>
-        <translation>Имя пользователя</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="197"/>
-        <source>Password</source>
-        <translation>Пароль</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="237"/>
-        <source>Port</source>
-        <translation>Порт</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="289"/>
-        <source>Connect</source>
-        <translation>Подключиться</translation>
     </message>
 </context>
 <context>

@@ -4,7 +4,7 @@ import Sailfish.Silica 1.0
 Page {
     property bool connectedVirtual: false
 
-    objectName: "mainPage"
+    objectName: "connectionPage"
 
     Flickable {
         function activateFlick() {
@@ -137,7 +137,7 @@ Page {
                     acceptableInput: blocking || (text.length > 0 && validate.test(text))
                     onFocusChanged: {
                         if (focus) {
-                            activateFlick()
+                            flicked.activateFlick()
                         }
                         else {
                             getMessage()
@@ -176,7 +176,7 @@ Page {
                     acceptableInput: blocking || text.length > 0
                     onFocusChanged: {
                         if (focus) {
-                            activateFlick()
+                            flicked.activateFlick()
                         }
                         else {
                             getMessage()
@@ -216,7 +216,7 @@ Page {
                     acceptableInput: blocking || text.length > 0
                     onFocusChanged: {
                         if (focus) {
-                            activateFlick()
+                            flicked.activateFlick()
                         }
                         else {
                             getMessage()
@@ -269,7 +269,7 @@ Page {
                     acceptableInput: blocking || (text.length > 0 && validate(text))
                     onFocusChanged: {
                         if (focus) {
-                            activateFlick()
+                            flicked.activateFlick()
                         }
                         else {
                             getMessage()

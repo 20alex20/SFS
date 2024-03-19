@@ -35,6 +35,64 @@
     </message>
 </context>
 <context>
+    <name>ConnectionPage</name>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="35"/>
+        <source>Connection</source>
+        <translation>Connection</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="44"/>
+        <location filename="../qml/pages/ConnectionPage.qml" line="89"/>
+        <source>New</source>
+        <translation>New</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="112"/>
+        <source>Host</source>
+        <translation>Host</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="122"/>
+        <location filename="../qml/pages/ConnectionPage.qml" line="173"/>
+        <location filename="../qml/pages/ConnectionPage.qml" line="213"/>
+        <location filename="../qml/pages/ConnectionPage.qml" line="246"/>
+        <source>Field is empty</source>
+        <translation>Field is empty</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="124"/>
+        <location filename="../qml/pages/ConnectionPage.qml" line="248"/>
+        <source>The field is filled in incorrectly</source>
+        <translation>The field is filled in incorrectly</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="133"/>
+        <source>IP-address</source>
+        <translation>IP-address</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="158"/>
+        <source>User name</source>
+        <translation>User name</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="197"/>
+        <source>Password</source>
+        <translation>Password</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="237"/>
+        <source>Port</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ConnectionPage.qml" line="289"/>
+        <source>Connect</source>
+        <translation>Connect</translation>
+    </message>
+</context>
+<context>
     <name>Controller</name>
     <message>
         <location filename="../qml/mvc/Controller.qml" line="17"/>
@@ -183,64 +241,6 @@
         <location filename="../qml/loaders/FileManagerLoader.qml" line="289"/>
         <source>Properties</source>
         <translation>Properties</translation>
-    </message>
-</context>
-<context>
-    <name>MainPage</name>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="35"/>
-        <source>Connection</source>
-        <translation>Connection</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="44"/>
-        <location filename="../qml/pages/MainPage.qml" line="89"/>
-        <source>New</source>
-        <translation>New</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="112"/>
-        <source>Host</source>
-        <translation>Host</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="133"/>
-        <source>IP-address</source>
-        <translation>IP-address</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="122"/>
-        <location filename="../qml/pages/MainPage.qml" line="173"/>
-        <location filename="../qml/pages/MainPage.qml" line="213"/>
-        <location filename="../qml/pages/MainPage.qml" line="246"/>
-        <source>Field is empty</source>
-        <translation>Field is empty</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="124"/>
-        <location filename="../qml/pages/MainPage.qml" line="248"/>
-        <source>The field is filled in incorrectly</source>
-        <translation>The field is filled in incorrectly</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="158"/>
-        <source>User name</source>
-        <translation>User name</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="197"/>
-        <source>Password</source>
-        <translation>Password</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="237"/>
-        <source>Port</source>
-        <translation>Port</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/MainPage.qml" line="289"/>
-        <source>Connect</source>
-        <translation>Connect</translation>
     </message>
 </context>
 <context>

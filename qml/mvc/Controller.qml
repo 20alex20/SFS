@@ -19,7 +19,7 @@ QtObject {
             // код на плюсах
 
             model.destroy()
-            pageStack.replaceAbove(null, Qt.resolvedUrl("../pages/MainPage.qml"))
+            pageStack.replaceAbove(null, Qt.resolvedUrl("../pages/ConnectionPage.qml"))
         }
     }
     function reconnect() {
